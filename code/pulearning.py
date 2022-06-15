@@ -20,21 +20,56 @@ def seed_everything(seed):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-class TrainDataset(torch.utils.data.Dataset):
-    def __init__(self, e_dict, data, num_ng):
+class KnowledgeGraphDataset(torch.utils.data.Dataset):
+    def __init__(self, 
+                e_dict, 
+                r_dict, 
+                train_data, 
+                already_ts_dict, 
+                already_hs_dict,
+                num_ng):
         super().__init__()
-        self.n_candidate = len(e_dict)
-        self.data = data
+        self.e_dict = e_dict
+        self.r_dict = r_dict
+        self.data = torch.tensor(train_data.values)
+        self.already_ts_dict = already_ts_dict
+        self.already_hs_dict = already_hs_dict
         self.num_ng = num_ng
+    
+    def sampling(self, head, rel, tail):
+        already_ts = torch.tensor(self.already_ts_dict[(head.item(), rel.item())])
+        already_hs = torch.tensor(self.already_hs_dict[(tail.item(), rel.item())])
+        neg_pool_t = torch.ones(len(self.e_dict))
+        neg_pool_t[already_ts] = 0
+        neg_pool_t = neg_pool_t.nonzero()
+        neg_pool_h = torch.ones(len(self.e_dict))
+        neg_pool_h[already_hs] = 0
+        neg_pool_h = neg_pool_h.nonzero()
+        neg_t = neg_pool_t[torch.randint(len(neg_pool_t), (self.num_ng//2,))]
+        neg_h = neg_pool_h[torch.randint(len(neg_pool_h), (self.num_ng//2,))]
+        return neg_t, neg_h
     
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        query = self.data[idx][:-1]
-        neg_answers = torch.randint(self.n_candidate, (self.num_ng, 1))
-        neg = torch.cat([query.expand(self.num_ng, -1), neg_answers], dim=1)
-        return torch.cat([self.data[idx].unsqueeze(dim=0), neg], dim=0)
+        head, rel, tail = self.data[idx]
+        neg_t, neg_h = self.sampling(head, rel, tail)
+        neg_t = torch.cat([torch.tensor([head, rel]).expand(self.num_ng//2, -1), neg_t], dim=1)
+        neg_h = torch.cat([neg_h, torch.tensor([rel, tail]).expand(self.num_ng//2, -1)], dim=1)
+        sample = torch.cat([torch.tensor([head, rel, tail]).unsqueeze(0), neg_t, neg_h], dim=0)
+        return sample
+
+class TreatmentDataset(torch.utils.data.Dataset):
+    def __init__(self, data):
+        super().__init__()
+        self.data = torch.tensor(data.values)
+    
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return self.data[idx]
 
 
 class DrugTreatmentPU(torch.nn.Module):
@@ -128,131 +163,59 @@ class DrugTreatmentPU(torch.nn.Module):
         # return torch.sigmoid(self.fc_2(torch.cat([mid, X[:, len(iprs_dict):]], dim=-1)))
         return torch.sigmoid(self.fc_2(torch.nn.functional.leaky_relu(self.do(self.fc_1(X)))))
 
-def read_neg(root):
-    info = []
-    with open(root + 'neg.txt') as f:
-        for line in f:
-            line = line.split('\t')
-            if line[0] == 'UniProtKB' and 'NOT' in line[3]:
-                info.append([line[1], line[4]])
-    info = pd.DataFrame(info, columns=['protein', 'terms'])
-    info_grouped = info.groupby(['protein'])['terms'].apply(list).reset_index(name='grouped').values
-    info_dict = {}
-    for record in info_grouped:
-        info_dict[record[0]] = record[1]
-    return info_dict
 
 def read_data(cfg):
-    train_data = []
+    train_data_kg = []
+    train_data_tr = []
     with open(cfg.root + cfg.dataset + '/train_' + cfg.fold + '.ttl') as f:
         for line in f:
-            train_data.append(line.strip().split('\t'))
-    train_data = pd.DataFrame(train_data, columns=['h', 'r', 't'])
+            line = line.strip().split('\t')
+            if line[1] == 'ex:belong_to':
+                if line[2] == 'ex:effective':
+                    train_data_tr.append([line[0], 1])
+                elif line[2] == 'ex:low_effect':
+                    train_data_tr.append([line[0], 0])
+                else:
+                    raise ValueError
+            else:
+                train_data_kg.append(line)
+    train_data_kg = pd.DataFrame(train_data_kg, columns=['h', 'r', 't'])
+    train_data_tr = pd.DataFrame(train_data_tr, columns=['tr', 'label'])
     
     test_data = []
     with open(cfg.root + cfg.dataset + '/test_' + cfg.fold + '.ttl') as f:
         for line in f:
-            test_data.append(line.strip().split('\t'))
-    test_data = pd.DataFrame(test_data, columns=['h', 'r', 't'])
+            line = line.strip().split('\t')
+            if line[2] == 'ex:effective':
+                test_data.append([line[0], 1])
+            elif line[2] == 'ex:low_effect':
+                test_data.append([line[0], 0])
+            else:
+                raise ValueError
+    test_data = pd.DataFrame(test_data, columns=['tr', 'label'])
     
-    all_data = pd.concat([train_data, test_data])
-    all_e = set(all_data['h'].unique()) | set(all_data['t'].unique())
-    all_r = set(all_data['r'].unique())
+    all_e = set(train_data_kg['h'].unique()) | set(train_data_kg['t'].unique()) | set(train_data_tr['tr'].unique()) | set(test_data['tr'].unique())
+    all_r = set(train_data_kg['r'].unique())
     
     e_dict = {k: v for v, k in enumerate(all_e)}
     r_dict = {k: v for v, k in enumerate(all_r)}
     
-    train_data.h = train_data.h.map(e_dict)
-    train_data.r = train_data.r.map(r_dict)
-    train_data.t = train_data.t.map(e_dict)
+    train_data_kg.h = train_data_kg.h.map(e_dict)
+    train_data_kg.r = train_data_kg.r.map(r_dict)
+    train_data_kg.t = train_data_kg.t.map(e_dict)
+    train_data_tr.tr = train_data_tr.tr.map(e_dict)
+    test_data.tr = test_data.tr.map(e_dict)
     
-    test_data.h = test_data.h.map(e_dict)
-    test_data.r = test_data.r.map(r_dict)
-    test_data.t = test_data.t.map(e_dict)
+    already_ts_dict = {}
+    already_hs_dict = {}
+    already_ts = train_data_kg.groupby(['h', 'r'])['t'].apply(list).reset_index(name='ts').values
+    already_hs = train_data_kg.groupby(['t', 'r'])['h'].apply(list).reset_index(name='hs').values
+    for record in already_ts:
+        already_ts_dict[(record[0], record[1])] = record[2]
+    for record in already_hs:
+        already_hs_dict[(record[0], record[1])] = record[2]
     
-    return e_dict, r_dict, train_data, test_data
-
-def name2idx(data, terms_dict, iprs_dict, go, neg=[]):
-    X = []
-    Y = []
-    pos_count = 0
-    neg_count = 0
-    unl_count = 0
-    for i in range(len(data)):
-        xs_mapped = torch.tensor(data[i][0]).unsqueeze(dim=0)
-        # xs_mapped_1 = torch.zeros(1, len(iprs_dict))
-        # xs = data[i][0]
-        # for x in xs:
-        #     xs_mapped_1[0][iprs_dict[x]] = 1
-        # xs_mapped_2 = torch.tensor(data[i][1]).unsqueeze(dim=0)
-        # xs_mapped = torch.cat([xs_mapped_1, xs_mapped_2], dim=-1)
-        ys_mapped = torch.zeros(1, len(terms_dict))
-        ys = data[i][2]
-        for y in ys:
-            try:
-                ys_mapped[0][terms_dict[y]] = 1
-            except:
-                pass
-        if len(neg):
-            accessions = data[i][3].strip(';').split('; ')
-            for accession in accessions:
-                try:
-                    negs = neg[accession]
-                    for n in negs:
-                        all_negs = go.get_descendants(n)
-                        for all_neg in all_negs:
-                            try:
-                                ys_mapped[0][terms_dict[all_neg]] = -1
-                            except:
-                                pass
-                except:
-                    pass
-            pos_count += (ys_mapped == 1).sum()
-            neg_count += (ys_mapped == -1).sum()
-            unl_count += (ys_mapped == 0).sum()
-        X.append(xs_mapped)
-        Y.append(ys_mapped)
-    if len(neg):
-        print(f'P: {pos_count}, N: {neg_count}, U: {unl_count}')
-    return torch.cat(X, dim=0), torch.cat(Y, dim=0)
-
-def test(model, loader, device, verbose, test_data, terms_dict, go):
-    if verbose == 1:
-        loader = tqdm.tqdm(loader)
-    preds = []
-    labels = []
-    with torch.no_grad():
-        for X, Y in loader:
-            X = X.to(device)
-            pred = model.predict(X)
-            preds.append(pred)
-            labels.append(Y)
-    preds = torch.cat(preds, dim=0)
-
-    results = []
-    for pred in preds:
-        results.append(pred.cpu().numpy().tolist())
-    
-    print('Propogating results.')
-    for scores in results:
-        prop_annots = {}
-        for go_id, j in terms_dict.items():
-            score = scores[j]
-            for sup_go in go.get_anchestors(go_id):
-                if sup_go in prop_annots:
-                    prop_annots[sup_go] = max(prop_annots[sup_go], score)
-                else:
-                    prop_annots[sup_go] = score
-        for go_id, score in prop_annots.items():
-            if go_id in terms_dict:
-                scores[terms_dict[go_id]] = score
-    
-    # auc = round(roc_auc_score(torch.cat(labels, dim=0).cpu().flatten(), torch.tensor(results).flatten()), 4)
-    # aupr = round(average_precision_score(torch.cat(labels, dim=0).cpu().flatten(), torch.tensor(results).flatten()), 4)
-    # print(f'#Test# AUC: {auc}, AUPR: {aupr}')
-
-    test_data['preds'] = results
-    return test_data
+    return e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
@@ -267,9 +230,10 @@ def parse_args(args=None):
     parser.add_argument('--prior', default=0.0001, type=float)
     parser.add_argument('--emb_dim', default=512, type=int)
     parser.add_argument('--pu', default=1, type=int)
-    parser.add_argument('--lmbda', default=1, type=float)
+    parser.add_argument('--num_ng', default=4, type=int)
+    # parser.add_argument('--lmbda', default=1, type=float)
     # Untunable
-    parser.add_argument('--num_workers', default=4, type=int)
+    parser.add_argument('--num_workers', default=0, type=int)
     parser.add_argument('--max_epochs', default=5000, type=int)
     parser.add_argument('--seed', default=42, type=int)
     parser.add_argument('--gpu', default=0, type=int)
@@ -289,35 +253,43 @@ if __name__ == '__main__':
     # if not os.path.exists(save_root):
     #     os.makedirs(save_root)
     
-    e_dict, r_dict, train_data, test_data = read_data(cfg)
+    e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict = read_data(cfg)
     print(f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}')
-    # train_dataset = DeepGODataset(X_train, Y_train)
-    # train_dataloader = torch.utils.data.DataLoader(dataset=train_dataset, 
-    #                                                batch_size=cfg.bs, 
-    #                                                num_workers=cfg.num_workers, 
-    #                                                shuffle=True, 
-    #                                                drop_last=True)
-    # test_dataset = DeepGODataset(X_test, Y_test)
-    # test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset, 
-    #                                               batch_size=cfg.bs, 
-    #                                               num_workers=cfg.num_workers, 
-    #                                               shuffle=False, 
-    #                                               drop_last=False)                                 
-    # model = DeepGOPU(cfg.emb_dim, terms_dict, iprs_dict, cfg.do, cfg.prior, cfg.pu, cfg.lmbda)
-    # model = model.to(device)
+    train_dataset_kg = KnowledgeGraphDataset(e_dict, r_dict, train_data_kg, already_ts_dict, already_hs_dict, cfg.num_ng)
+    train_dataset_tr = TreatmentDataset(train_data_tr)
+    test_dataset = TreatmentDataset(test_data)
+    
+    train_dataloader_kg = torch.utils.data.DataLoader(dataset=train_dataset_kg, 
+                                                    batch_size=cfg.bs, 
+                                                    num_workers=cfg.num_workers, 
+                                                    shuffle=True, 
+                                                    drop_last=True)
+    train_dataloader_tr = torch.utils.data.DataLoader(dataset=train_dataset_tr, 
+                                                    batch_size=cfg.bs//4, 
+                                                    num_workers=cfg.num_workers, 
+                                                    shuffle=True, 
+                                                    drop_last=True)
+    test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset, 
+                                                    batch_size=cfg.bs//4, 
+                                                    num_workers=cfg.num_workers, 
+                                                    shuffle=False, 
+                                                    drop_last=False)                                 
+    model = DrugTreatmentPU(cfg.emb_dim, e_dict, r_dict, cfg.do, cfg.prior, cfg.pu, cfg.lmbda)
+    model = model.to(device)
     # tolerance = cfg.tolerance
     # max_fmax = 0
     # # min_loss = 100000
-    # optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.wd)
-    # for epoch in range(cfg.max_epochs):
-    #     print(f'Epoch {epoch + 1}:')
+    optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.wd)
+    for epoch in range(cfg.max_epochs):
+        print(f'Epoch {epoch + 1}:')
     #     model.train()
     #     avg_loss = []
-    #     if cfg.verbose == 1:
-    #         train_dataloader = tqdm.tqdm(train_dataloader)
-    #     for X, Y in train_dataloader:
-    #         X = X.to(device)
-    #         Y = Y.to(device)
+        if cfg.verbose == 1:
+            train_dataloader_kg = tqdm.tqdm(train_dataloader_kg)
+            train_dataloader_tr = tqdm.tqdm(train_dataloader_tr)
+        for batch in zip(train_dataloader_kg, train_dataloader_tr):
+            batch_kg = batch[0].to(device)
+            batch_tr = batch[1].to(device)
     #         loss = model(X, Y)
     #         optimizer.zero_grad()
     #         loss.backward()
