@@ -93,31 +93,9 @@ class DrugTreatmentPU(torch.nn.Module):
         torch.nn.init.xavier_uniform_(self.r_embedding.weight.data)
 
     def pu_loss(self, pred):
-        pdb.set_trace()
-        # pos_label = (label == 1).float()
-        # unl_label = (label == 0).float() + (label == -1).float()
-
-        # p_above = - (torch.nn.functional.logsigmoid(pred) * pos_label).sum() / pos_label.sum()
-        # p_below = (torch.log(1 - torch.sigmoid(pred) + 1e-10) * pos_label).sum() / pos_label.sum()
-        # u = - (torch.log(1 - torch.sigmoid(pred) + 1e-10) * unl_label).sum() / unl_label.sum()
-        # if u > self.prior * p_below:
-        #     return self.prior * p_above - self.prior * p_below + u
-        # else:
-        #     return self.prior * p_above
-
-
-        pos_label = (label == 1).float()
-        unl_label = (label == 0).float()
-        neg_label = (label == -1).float()
-
-        p_above = - (torch.nn.functional.logsigmoid(pred) * pos_label).sum() / pos_label.sum()
-        p_below = (torch.log(1 - torch.sigmoid(pred) + 1e-10) * pos_label).sum() / pos_label.sum()
-        u_0 = - (torch.log(1 - torch.sigmoid(pred) + 1e-10) * unl_label).sum() / unl_label.sum()
-        if neg_label.sum() > 0:
-            u_1 = - (torch.log(1 - torch.sigmoid(pred) + 1e-10) * neg_label).sum() / neg_label.sum()
-            u = (u_0 + lmbda * u_1) / (1 + lmbda)
-        else:
-            u = u_0
+        p_above = - (torch.nn.functional.logsigmoid(pred[:, 0])).mean()
+        p_below = (torch.log(1 - torch.sigmoid(pred[:, 0]) + 1e-10)).mean()
+        u = - (torch.log(1 - torch.sigmoid(pred[:, 1:]) + 1e-10)).mean()
         if u > self.prior * p_below:
             return self.prior * p_above - self.prior * p_below + u
         else:
@@ -230,7 +208,7 @@ def parse_args(args=None):
     parser.add_argument('--do', default=0.2, type=float)
     parser.add_argument('--prior', default=0.0001, type=float)
     parser.add_argument('--emb_dim', default=512, type=int)
-    parser.add_argument('--loss_type', default='pn', type=str)
+    parser.add_argument('--loss_type', default='pu', type=str)
     parser.add_argument('--num_ng', default=4, type=int)
     parser.add_argument('--lmbda', default=1, type=float)
     parser.add_argument('--base_model', default='DistMult', type=str)
