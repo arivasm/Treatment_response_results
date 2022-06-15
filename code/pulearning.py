@@ -1,3 +1,4 @@
+from turtle import forward
 import torch
 import pandas as pd
 import pdb
@@ -73,18 +74,23 @@ class TreatmentDataset(torch.utils.data.Dataset):
 
 
 class DrugTreatmentPU(torch.nn.Module):
-    def __init__(self, emb_dim, terms_dict, iprs_dict, do, prior, pu, lmbda):
+    def __init__(self, e_dict, r_dict, cfg):
         super().__init__()
-        self.emb_dim = emb_dim
-        self.do = torch.nn.Dropout(do)
-        self.prior = prior
-        self.pu = pu
-        self.fc_1 = torch.nn.Linear(1280, emb_dim)
-        self.fc_2 = torch.nn.Linear(emb_dim, len(terms_dict))
-        self.lmbda = lmbda
+        self.emb_dim = cfg.emb_dim
+        self.do = torch.nn.Dropout(cfg.do)
+        self.prior = cfg.prior
+        self.loss_type = cfg.loss_type
+        self.base_model = cfg.base_model
+        self.lmbda = cfg.lmbda
+        self.fc_1 = torch.nn.Linear(cfg.emb_dim, cfg.emb_dim)
+        self.fc_2 = torch.nn.Linear(cfg.emb_dim, 1)
+        self.e_embedding = torch.nn.Embedding(len(e_dict), cfg.emb_dim)
+        self.r_embedding = torch.nn.Embedding(len(r_dict), cfg.emb_dim)
 
         torch.nn.init.xavier_uniform_(self.fc_1.weight.data)
         torch.nn.init.xavier_uniform_(self.fc_2.weight.data)
+        torch.nn.init.xavier_uniform_(self.e_embedding.weight.data)
+        torch.nn.init.xavier_uniform_(self.r_embedding.weight.data)
 
     def pur_loss(self, pred, label):
         p_above = - (torch.nn.functional.logsigmoid(pred) * label).sum() / label.sum()
@@ -125,39 +131,47 @@ class DrugTreatmentPU(torch.nn.Module):
         else:
             return self.prior * p_above
 
-        # # PU Learning
-        # p_above = - (torch.nn.functional.logsigmoid(pred) * pos_label).sum() / pos_label.sum()
-        # p_below = (torch.log(1 - torch.sigmoid(pred) + 1e-10) * pos_label).sum() / pos_label.sum()
-        # u = - (torch.log(1 - torch.sigmoid(pred) + 1e-10) * unl_label).sum() / unl_label.sum()
-        # if u > self.prior * p_below:
-        #     pu_loss = self.prior * p_above - self.prior * p_below + u
-        # else:
-        #     pu_loss = self.prior * p_above
-
-        # # PN Learning
-        # if neg_label.sum() > 0:
-        #     # pn_loss = - (torch.nn.functional.logsigmoid(pred) * pos_label).sum() / pos_label.sum() - (torch.log(1 - torch.sigmoid(pred) + 1e-10) * neg_label).sum() / neg_label.sum()
-        #     pn_loss = - torch.nn.functional.logsigmoid((pred * pos_label).sum() / pos_label.sum() - (pred * neg_label).sum() / neg_label.sum())
-        # else:
-        #     pn_loss = 0
-        # return pu_loss + lmbda * pn_loss
     
     def pn_loss(self, pred, label):
         pos = - (torch.nn.functional.logsigmoid(pred) * label).sum() / label.sum()
         neg = - (torch.log(1 - torch.sigmoid(pred) + 1e-10) * (1 - label)).sum() / (1 - label).sum()
         return pos + neg
 
-    def forward(self, X, Y):
-        # mid = torch.nn.functional.leaky_relu(self.do(self.fc_1(X[:, :len(iprs_dict)])))
-        # X_pred = self.fc_2(torch.cat([mid, X[:, len(iprs_dict):]], dim=-1))
-        X_pred = self.fc_2(torch.nn.functional.leaky_relu(self.do(self.fc_1(X))))
+    def _DistMult(self, h_emb, r_emb, t_emb):
+        return (h_emb * r_emb * t_emb).sum(dim=-1)
+    
+    def _forward_kg(self, data):
+        h_emb = self.e_embedding(data[:, :, 0])
+        r_emb = self.r_embedding(data[:, :, 1])
+        t_emb = self.e_embedding(data[:, :, 2])
+        if self.base_model == 'DistMult':
+            return self._DistMult(h_emb, r_emb, t_emb)
+        else:
+            raise ValueError
+
+    def get_loss_kg(self, data):
+        logits = self._forward_kg(data)
+        pdb.set_trace()
         if self.pu == 0:
             return self.pn_loss(X_pred, Y)
         elif self.pu == 1:
             return self.pu_loss(X_pred, Y, self.lmbda)
         elif self.pu == 2:
             return self.pur_loss(X_pred, Y)
-        
+    
+    def _forward_tr(self, data):
+        pos = torch.index_select(data, 0, (data[:, 1] == 1).nonzero().squeeze(-1))
+        neg = torch.index_select(data, 0, (data[:, 1] == 0).nonzero().squeeze(-1))
+        e_emb_pos = self.e_embedding(pos[:, 0])
+        e_emb_neg = self.e_embedding(neg[:, 0])
+        pred_pos = self.fc_2(torch.nn.functional.leaky_relu(self.do(self.fc_1(e_emb_pos))))
+        pred_neg = self.fc_2(torch.nn.functional.leaky_relu(self.do(self.fc_1(e_emb_neg))))
+        return pred_pos, pred_neg
+    
+    def get_loss_tr(self, data):
+        pred_pos, pred_neg = self._forward_tr(data)
+        return (- torch.nn.functional.logsigmoid(pred_pos).mean() - torch.nn.functional.logsigmoid(- pred_neg).mean()) / 2
+
     def predict(self, X):
         # mid = torch.nn.functional.leaky_relu(self.do(self.fc_1(X[:, :len(iprs_dict)])))
         # return torch.sigmoid(self.fc_2(torch.cat([mid, X[:, len(iprs_dict):]], dim=-1)))
@@ -229,16 +243,17 @@ def parse_args(args=None):
     parser.add_argument('--do', default=0.2, type=float)
     parser.add_argument('--prior', default=0.0001, type=float)
     parser.add_argument('--emb_dim', default=512, type=int)
-    parser.add_argument('--pu', default=1, type=int)
+    parser.add_argument('--loss_type', default=1, type=int)
     parser.add_argument('--num_ng', default=4, type=int)
-    # parser.add_argument('--lmbda', default=1, type=float)
+    parser.add_argument('--lmbda', default=1, type=float)
+    parser.add_argument('--base_model', default='DistMult', type=str)
     # Untunable
     parser.add_argument('--num_workers', default=0, type=int)
     parser.add_argument('--max_epochs', default=5000, type=int)
     parser.add_argument('--seed', default=42, type=int)
     parser.add_argument('--gpu', default=0, type=int)
     parser.add_argument('--valid_interval', default=20, type=int)
-    parser.add_argument('--verbose', default=1, type=int)
+    parser.add_argument('--verbose', default=0, type=int)
     parser.add_argument('--tolerance', default=3, type=int)
     return parser.parse_args(args)
 
@@ -274,7 +289,7 @@ if __name__ == '__main__':
                                                     num_workers=cfg.num_workers, 
                                                     shuffle=False, 
                                                     drop_last=False)                                 
-    model = DrugTreatmentPU(cfg.emb_dim, e_dict, r_dict, cfg.do, cfg.prior, cfg.pu, cfg.lmbda)
+    model = DrugTreatmentPU(e_dict, r_dict, cfg)
     model = model.to(device)
     # tolerance = cfg.tolerance
     # max_fmax = 0
@@ -282,14 +297,16 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.wd)
     for epoch in range(cfg.max_epochs):
         print(f'Epoch {epoch + 1}:')
-    #     model.train()
-    #     avg_loss = []
+        model.train()
+        avg_loss = []
         if cfg.verbose == 1:
             train_dataloader_kg = tqdm.tqdm(train_dataloader_kg)
             train_dataloader_tr = tqdm.tqdm(train_dataloader_tr)
         for batch in zip(train_dataloader_kg, train_dataloader_tr):
             batch_kg = batch[0].to(device)
             batch_tr = batch[1].to(device)
+            loss_kg = model.get_loss_kg(batch_kg)
+            loss_tr = model.get_loss_tr(batch_tr)
     #         loss = model(X, Y)
     #         optimizer.zero_grad()
     #         loss.backward()
