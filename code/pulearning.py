@@ -1,3 +1,4 @@
+from multiprocessing.sharedctypes import Value
 from turtle import forward
 import torch
 import pandas as pd
@@ -81,7 +82,6 @@ class DrugTreatmentPU(torch.nn.Module):
         self.prior = cfg.prior
         self.loss_type = cfg.loss_type
         self.base_model = cfg.base_model
-        self.lmbda = cfg.lmbda
         self.fc_1 = torch.nn.Linear(cfg.emb_dim, cfg.emb_dim)
         self.fc_2 = torch.nn.Linear(cfg.emb_dim, 1)
         self.e_embedding = torch.nn.Embedding(len(e_dict), cfg.emb_dim)
@@ -92,16 +92,8 @@ class DrugTreatmentPU(torch.nn.Module):
         torch.nn.init.xavier_uniform_(self.e_embedding.weight.data)
         torch.nn.init.xavier_uniform_(self.r_embedding.weight.data)
 
-    def pur_loss(self, pred, label):
-        p_above = - (torch.nn.functional.logsigmoid(pred) * label).sum() / label.sum()
-        p_below = - (torch.nn.functional.logsigmoid(-pred) * label).sum() / label.sum()
-        u = - torch.nn.functional.logsigmoid((pred * label).sum() / label.sum() - (pred * (1 - label)).sum() / (1 - label).sum())
-        if u > self.prior * p_below:
-            return self.prior * p_above - self.prior * p_below + u
-        else:
-            return self.prior * p_above   
-
-    def pu_loss(self, pred, label, lmbda):
+    def pu_loss(self, pred):
+        pdb.set_trace()
         # pos_label = (label == 1).float()
         # unl_label = (label == 0).float() + (label == -1).float()
 
@@ -131,11 +123,10 @@ class DrugTreatmentPU(torch.nn.Module):
         else:
             return self.prior * p_above
 
-    
-    def pn_loss(self, pred, label):
-        pos = - (torch.nn.functional.logsigmoid(pred) * label).sum() / label.sum()
-        neg = - (torch.log(1 - torch.sigmoid(pred) + 1e-10) * (1 - label)).sum() / (1 - label).sum()
-        return pos + neg
+    def pn_loss(self, pred):
+        loss_pos = - torch.nn.functional.logsigmoid(pred[:, 0]).mean()
+        loss_neg = - torch.log(1 - torch.sigmoid(pred[:, 1:]) + 1e-10).mean()
+        return (loss_pos + loss_neg) / 2
 
     def _DistMult(self, h_emb, r_emb, t_emb):
         return (h_emb * r_emb * t_emb).sum(dim=-1)
@@ -150,15 +141,14 @@ class DrugTreatmentPU(torch.nn.Module):
             raise ValueError
 
     def get_loss_kg(self, data):
-        logits = self._forward_kg(data)
-        pdb.set_trace()
-        if self.pu == 0:
-            return self.pn_loss(X_pred, Y)
-        elif self.pu == 1:
-            return self.pu_loss(X_pred, Y, self.lmbda)
-        elif self.pu == 2:
-            return self.pur_loss(X_pred, Y)
-    
+        pred = self._forward_kg(data)
+        if self.loss_type == 'pn':
+            return self.pn_loss(pred)
+        elif self.loss_type == 'pu':
+            return self.pu_loss(pred)
+        else:
+            raise ValueError
+
     def _forward_tr(self, data):
         pos = torch.index_select(data, 0, (data[:, 1] == 1).nonzero().squeeze(-1))
         neg = torch.index_select(data, 0, (data[:, 1] == 0).nonzero().squeeze(-1))
@@ -170,12 +160,9 @@ class DrugTreatmentPU(torch.nn.Module):
     
     def get_loss_tr(self, data):
         pred_pos, pred_neg = self._forward_tr(data)
-        return (- torch.nn.functional.logsigmoid(pred_pos).mean() - torch.nn.functional.logsigmoid(- pred_neg).mean()) / 2
-
-    def predict(self, X):
-        # mid = torch.nn.functional.leaky_relu(self.do(self.fc_1(X[:, :len(iprs_dict)])))
-        # return torch.sigmoid(self.fc_2(torch.cat([mid, X[:, len(iprs_dict):]], dim=-1)))
-        return torch.sigmoid(self.fc_2(torch.nn.functional.leaky_relu(self.do(self.fc_1(X)))))
+        loss_pos = - torch.nn.functional.logsigmoid(pred_pos).mean()
+        loss_neg = - torch.log(1 - torch.sigmoid(pred_neg) + 1e-10).mean()
+        return (loss_pos + loss_neg) / 2
 
 
 def read_data(cfg):
@@ -243,7 +230,7 @@ def parse_args(args=None):
     parser.add_argument('--do', default=0.2, type=float)
     parser.add_argument('--prior', default=0.0001, type=float)
     parser.add_argument('--emb_dim', default=512, type=int)
-    parser.add_argument('--loss_type', default=1, type=int)
+    parser.add_argument('--loss_type', default='pn', type=str)
     parser.add_argument('--num_ng', default=4, type=int)
     parser.add_argument('--lmbda', default=1, type=float)
     parser.add_argument('--base_model', default='DistMult', type=str)
@@ -307,13 +294,13 @@ if __name__ == '__main__':
             batch_tr = batch[1].to(device)
             loss_kg = model.get_loss_kg(batch_kg)
             loss_tr = model.get_loss_tr(batch_tr)
-    #         loss = model(X, Y)
-    #         optimizer.zero_grad()
-    #         loss.backward()
-    #         optimizer.step()
-    #         avg_loss.append(loss.item())
-    #     avg_loss = round(sum(avg_loss)/len(avg_loss), 6)
-    #     print(f'Loss: {avg_loss}')
+            loss = (cfg.lmbda * loss_kg + loss_tr) / (cfg.lmbda + 1)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            avg_loss.append(loss.item())
+        avg_loss = round(sum(avg_loss)/len(avg_loss), 6)
+        print(f'Loss: {avg_loss}')
     #     if (epoch + 1) % cfg.valid_interval == 0:
     #         model.eval()
     #         fmax = validate(model, valid_dataloader, device, cfg.verbose)
