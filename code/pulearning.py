@@ -1,5 +1,3 @@
-from multiprocessing.sharedctypes import Value
-from turtle import forward
 import torch
 import pandas as pd
 import pdb
@@ -141,6 +139,10 @@ class DrugTreatmentPU(torch.nn.Module):
         loss_pos = - torch.nn.functional.logsigmoid(pred_pos).mean()
         loss_neg = - torch.log(1 - torch.sigmoid(pred_neg) + 1e-10).mean()
         return (loss_pos + loss_neg) / 2
+    
+    def predict(self, data):
+        e_emb = self.e_embedding(data[:, 0])
+        return torch.sigmoid(self.fc_2(torch.nn.functional.leaky_relu(self.do(self.fc_1(e_emb)))))
 
 
 def read_data(cfg):
@@ -196,6 +198,18 @@ def read_data(cfg):
     
     return e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict
 
+def get_f1(labels, preds):
+    N = len(labels)
+    as_pos = (preds > 0.5).astype(int)
+    as_neg = (preds < 0.5).astype(int)
+    tp = (as_pos * labels).sum() 
+    fp = (as_pos * (1 - labels)).sum()
+    fn = (as_neg * labels).sum()
+    precision = tp / (tp + fp)
+    recall = tp / (tp + fn)
+    f1 = (2 * precision * recall) / (precision + recall)
+    return round(precision, 4), round(recall, 4), round(f1, 4)
+
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', default='../data/', type=str)
@@ -217,7 +231,7 @@ def parse_args(args=None):
     parser.add_argument('--max_epochs', default=5000, type=int)
     parser.add_argument('--seed', default=42, type=int)
     parser.add_argument('--gpu', default=0, type=int)
-    parser.add_argument('--valid_interval', default=20, type=int)
+    parser.add_argument('--valid_interval', default=5, type=int)
     parser.add_argument('--verbose', default=0, type=int)
     parser.add_argument('--tolerance', default=3, type=int)
     return parser.parse_args(args)
@@ -256,17 +270,17 @@ if __name__ == '__main__':
                                                     drop_last=False)                                 
     model = DrugTreatmentPU(e_dict, r_dict, cfg)
     model = model.to(device)
-    # tolerance = cfg.tolerance
-    # max_fmax = 0
-    # # min_loss = 100000
+    tolerance = cfg.tolerance
+    max_auc = 0
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.wd)
+    if cfg.verbose == 1:
+        train_dataloader_kg = tqdm.tqdm(train_dataloader_kg)
+        train_dataloader_tr = tqdm.tqdm(train_dataloader_tr)
+        test_dataloader = tqdm.tqdm(test_dataloader)
     for epoch in range(cfg.max_epochs):
         print(f'Epoch {epoch + 1}:')
         model.train()
         avg_loss = []
-        if cfg.verbose == 1:
-            train_dataloader_kg = tqdm.tqdm(train_dataloader_kg)
-            train_dataloader_tr = tqdm.tqdm(train_dataloader_tr)
         for batch in zip(train_dataloader_kg, train_dataloader_tr):
             batch_kg = batch[0].to(device)
             batch_tr = batch[1].to(device)
@@ -279,26 +293,26 @@ if __name__ == '__main__':
             avg_loss.append(loss.item())
         avg_loss = round(sum(avg_loss)/len(avg_loss), 6)
         print(f'Loss: {avg_loss}')
-    #     if (epoch + 1) % cfg.valid_interval == 0:
-    #         model.eval()
-    #         fmax = validate(model, valid_dataloader, device, cfg.verbose)
-    #         if fmax > max_fmax:
-    #             max_fmax = fmax
-    #             tolerance = cfg.tolerance
-    #         else:
-    #             tolerance -= 1
-    #         # if avg_loss < min_loss:
-    #         #     min_loss = avg_loss
-    #         #     tolerance = cfg.tolerance
-    #         # else:
-    #         #     tolerance -= 1
-    #         torch.save(model.state_dict(), save_root + (str(epoch + 1)))
-    #     if tolerance == 0:
-    #         print(f'Best performance at epoch {epoch - cfg.tolerance * cfg.valid_interval + 1}')
-    #         model.eval()
-    #         model.load_state_dict(torch.load(save_root + str(epoch - cfg.tolerance * cfg.valid_interval + 1)))
-    #         # model.load_state_dict(torch.load(save_root + '420'))
-    #         test_df = test(model, test_dataloader, device, cfg.verbose, test_data, terms_dict, go)
-    #         evaluate(cfg.root[:-1], cfg.dataset, test_df)
-    #         break
+        if (epoch + 1) % cfg.valid_interval == 0:
+            labels = []
+            preds = []
+            with torch.no_grad():
+                model.eval()
+                # precision, recall, f1 (T = 0.5)
+                for batch in test_dataloader:
+                    labels.append(batch[:, 1])
+                    batch = batch.to(device)
+                    preds.append(model.predict(batch))
+            labels, preds = torch.cat(labels).numpy(), torch.cat(preds).cpu().numpy().flatten()
+            auc = round(roc_auc_score(labels, preds), 4)
+            precision, recall, f1 = get_f1(labels, preds)
+            print(f'AUC:{auc}\tPrecision:{precision}\tRecall:{recall}\tF1:{f1}')
+            if auc > max_auc:
+                max_auc = auc
+                tolerance = cfg.tolerance
+            else:
+                tolerance -= 1
+            if auc == 1:
+                print(labels)
+                print(preds)
 
