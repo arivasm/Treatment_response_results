@@ -157,7 +157,8 @@ def read_data(cfg):
                 elif line[2] == 'ex:low_effect':
                     train_data_tr.append([line[0], 0])
                 else:
-                    raise ValueError
+                    train_data_kg.append(line)
+                    # raise ValueError
             else:
                 train_data_kg.append(line)
     train_data_kg = pd.DataFrame(train_data_kg, columns=['h', 'r', 't'])
@@ -213,16 +214,16 @@ def get_f1(labels, preds):
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', default='../data/', type=str)
-    parser.add_argument('--dataset', default='G1', type=str)
-    parser.add_argument('--fold', default='1', type=str)
+    parser.add_argument('--dataset', default='G3', type=str)
+    parser.add_argument('--fold', default='2', type=str)
     # Tunable
     parser.add_argument('--bs', default=256, type=int)
     parser.add_argument('--lr', default=0.001, type=float)
     parser.add_argument('--wd', default=0, type=float)
     parser.add_argument('--do', default=0.2, type=float)
-    parser.add_argument('--prior', default=0.0001, type=float)
+    parser.add_argument('--prior', default=0.01, type=float)
     parser.add_argument('--emb_dim', default=512, type=int)
-    parser.add_argument('--loss_type', default='pu', type=str)
+    parser.add_argument('--loss_type', default='pn', type=str)
     parser.add_argument('--num_ng', default=4, type=int)
     parser.add_argument('--lmbda', default=1, type=float)
     parser.add_argument('--base_model', default='DistMult', type=str)
@@ -312,7 +313,7 @@ if __name__ == '__main__':
                 tolerance = cfg.tolerance
             else:
                 tolerance -= 1
-            if auc == 1:
-                print(labels)
-                print(preds)
+            # if auc == 1:
+            #     print(labels)
+            #     print(preds)
 
