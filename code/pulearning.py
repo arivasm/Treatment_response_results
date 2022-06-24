@@ -6,9 +6,12 @@ import os
 import numpy as np
 import argparse
 import random
+import math
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import average_precision_score
 from sklearn.metrics import precision_recall_curve
+from sklearn.model_selection import KFold
+
 from warnings import filterwarnings
 filterwarnings('ignore')
 
@@ -17,6 +20,7 @@ def seed_everything(seed):
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
@@ -150,49 +154,51 @@ class DrugTreatmentPU(torch.nn.Module):
         return torch.sigmoid(self.fc_1(e_emb))
         # return torch.sigmoid(self.fc_2(torch.nn.functional.leaky_relu(self.do(self.fc_1(e_emb)))))
 
-def read_data(cfg):
-    
-    test_data = []
-    with open(cfg.root + cfg.dataset + '/test_' + cfg.fold + '.ttl') as f:
-        for line in f:
-            line = line.strip().split('\t')
-            if line[2] == 'ex:effective':
-                test_data.append([line[0], 1])
-            elif line[2] == 'ex:low_effect':
-                test_data.append([line[0], 0])
-            else:
-                raise ValueError
-    
-    train_data_kg = []
-    train_data_tr = []
-    with open(cfg.root + cfg.dataset + '/train_' + cfg.fold + '.ttl') as f:
+
+def generate_folds(cfg):
+    kg_data = []
+    tr_data = []
+    with open(cfg.root + cfg.dataset + '/G2.ttl') as f:
         for line in f:
             line = line.strip().split('\t')
             if line[1] == 'ex:belong_to':
                 if line[2] == 'ex:effective':
-                    train_data_tr.append([line[0], 1])
+                    tr_data.append([line[0], 1])
                 elif line[2] == 'ex:low_effect':
-                    train_data_tr.append([line[0], 0])
+                    tr_data.append([line[0], 0])
                 else:
-                    train_data_kg.append(line)
+                    kg_data.append(line)
             elif line[1] == 'ex:no_belong_to':
                 if line[2] == 'ex:low_effect':
-                    train_data_tr.append([line[0], 1])
+                    tr_data.append([line[0], 1])
                 elif line[2] == 'ex:effective':
-                    train_data_tr.append([line[0], 0])
+                    tr_data.append([line[0], 0])
                 else:
-                    train_data_kg.append(line)
+                    kg_data.append(line)
             else:
-                train_data_kg.append(line)
+                kg_data.append(line)
     
-    for train in train_data_tr:
-        for test in test_data:
-            if train == test:
-                train_data_tr.remove(train)    
+    kg_data = pd.DataFrame(kg_data, columns=['h', 'r', 't'])
+    tr_data = pd.DataFrame(tr_data, columns=['tr', 'label']).drop_duplicates()
+    kf = KFold(n_splits = 5, shuffle = True)
+    for i in range(5):
+        result = next(kf.split(tr_data), None)
+        train_data_tr, test_data = tr_data.iloc[result[0]], tr_data.iloc[result[1]]
+        train_data_tr.to_csv(cfg.root + cfg.dataset + '/train_data_tr_' + str(i) + '.csv')
+        test_data.to_csv(cfg.root + cfg.dataset + '/test_data_' + str(i) + '.csv')
+    kg_data.to_csv(cfg.root + cfg.dataset + '/train_data_kg.csv')
+    return kg_data
+
+def read_data(cfg, fold):
+    if cfg.cached == 1:
+        train_data_kg = pd.read_csv(cfg.root + cfg.dataset + '/train_data_kg.csv', index_col=0)
+    elif cfg.cached == 0:
+        train_data_kg = generate_folds(cfg)
+    else:
+        raise ValueError
     
-    test_data = pd.DataFrame(test_data, columns=['tr', 'label'])
-    train_data_kg = pd.DataFrame(train_data_kg, columns=['h', 'r', 't'])
-    train_data_tr = pd.DataFrame(train_data_tr, columns=['tr', 'label'])
+    train_data_tr = pd.read_csv(cfg.root + cfg.dataset + '/train_data_tr_' + str(fold) + '.csv', index_col=0)
+    test_data = pd.read_csv(cfg.root + cfg.dataset + '/test_data_' + str(fold) + '.csv', index_col=0)
     
     all_e = set(train_data_kg['h'].unique()) | set(train_data_kg['t'].unique()) | set(train_data_tr['tr'].unique()) | set(test_data['tr'].unique())
     all_r = set(train_data_kg['r'].unique())
@@ -217,33 +223,27 @@ def read_data(cfg):
     
     return e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict
 
-# def get_f1(labels, preds):
-#     N = len(labels)
-#     as_pos = (preds > 0.5).astype(int)
-#     as_neg = (preds < 0.5).astype(int)
-#     tp = (as_pos * labels).sum() 
-#     fp = (as_pos * (1 - labels)).sum()
-#     fn = (as_neg * labels).sum()
-#     precision = tp / (tp + fp)
-#     recall = tp / (tp + fn)
-#     f1 = (2 * precision * recall) / (precision + recall)
-#     return round(precision, 4), round(recall, 4), round(f1, 4)
-
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', default='../data/', type=str)
-    parser.add_argument('--dataset', default='G2', type=str)
-    parser.add_argument('--fold', default='1', type=str)
+    parser.add_argument('--dataset', default='KG', type=str)
     # Tunable
+    # 32, 64, 128, 256, 512
     parser.add_argument('--bs', default=256, type=int)
+    # 1e-1, 1e-2, 1e-3, 1e-4, 1e-5
     parser.add_argument('--lr', default=0.001, type=float)
-    parser.add_argument('--wd', default=0.0001, type=float)
-    parser.add_argument('--do', default=0.5, type=float)
-    parser.add_argument('--prior', default=0.001, type=float)
-    parser.add_argument('--emb_dim', default=64, type=int)
-    parser.add_argument('--loss_type', default='pu', type=str)
+    parser.add_argument('--wd', default=0, type=float)
+    parser.add_argument('--do', default=0.2, type=float)
+    # 1e-1, 1e-2, 1e-3, 1e-4, 1e-5
+    parser.add_argument('--prior', default=0.01, type=float)
+    # 16, 32, 64, 128, 256
+    parser.add_argument('--emb_dim', default=128, type=int)
+    parser.add_argument('--loss_type', default='pn', type=str)
+    # 2, 4, 8, 16, 32
     parser.add_argument('--num_ng', default=4, type=int)
-    parser.add_argument('--lmbda', default=1, type=float)
+    # 0.25, 0.5, 1, 2, 4
+    parser.add_argument('--lmbda', default=4, type=float)
+    # DistMult, TransE, ComplEx, SimplE, RotatE
     parser.add_argument('--base_model', default='DistMult', type=str)
     # Untunable
     parser.add_argument('--num_workers', default=0, type=int)
@@ -253,6 +253,7 @@ def parse_args(args=None):
     parser.add_argument('--valid_interval', default=5, type=int)
     parser.add_argument('--verbose', default=0, type=int)
     parser.add_argument('--tolerance', default=20, type=int)
+    parser.add_argument('--cached', default=1, type=int)
     return parser.parse_args(args)
 
 if __name__ == '__main__':
@@ -262,80 +263,95 @@ if __name__ == '__main__':
         print(f'\t{arg}: {getattr(cfg, arg)}')
     seed_everything(cfg.seed)
     device = torch.device(f'cuda:{cfg.gpu}' if torch.cuda.is_available() else 'cpu')
-    # save_root = f'../tmp/dataset_{cfg.dataset}_pu_{cfg.pu}_lmbda_{cfg.lmbda}_bs_{cfg.bs}_lr_{cfg.lr}_wd_{cfg.wd}_do_{cfg.do}_prior_{cfg.prior}_emb_dim_{cfg.emb_dim}/'
-    # if not os.path.exists(save_root):
-    #     os.makedirs(save_root)
     
-    e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict = read_data(cfg)
-    print(f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}')
-    train_dataset_kg = KnowledgeGraphDataset(e_dict, r_dict, train_data_kg, already_ts_dict, already_hs_dict, cfg.num_ng)
-    train_dataset_tr = TreatmentDataset(train_data_tr)
-    test_dataset = TreatmentDataset(test_data)
-    
-    train_dataloader_kg = torch.utils.data.DataLoader(dataset=train_dataset_kg, 
-                                                    batch_size=cfg.bs, 
-                                                    num_workers=cfg.num_workers, 
-                                                    shuffle=True, 
-                                                    drop_last=True)
-    train_dataloader_tr = torch.utils.data.DataLoader(dataset=train_dataset_tr, 
-                                                    batch_size=cfg.bs, 
-                                                    num_workers=cfg.num_workers, 
-                                                    shuffle=True, 
-                                                    drop_last=True)
-    test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset, 
-                                                    batch_size=cfg.bs//4, 
-                                                    num_workers=cfg.num_workers, 
-                                                    shuffle=False, 
-                                                    drop_last=False)                                 
-    model = DrugTreatmentPU(e_dict, r_dict, cfg)
-    model = model.to(device)
-    tolerance = cfg.tolerance
-    max_value = 0
-    optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.wd)
-    if cfg.verbose == 1:
-        train_dataloader_kg = tqdm.tqdm(train_dataloader_kg)
-        train_dataloader_tr = tqdm.tqdm(train_dataloader_tr)
-        test_dataloader = tqdm.tqdm(test_dataloader)
-    for epoch in range(cfg.max_epochs):
-        # print(f'Epoch {epoch + 1}:')
-        model.train()
-        avg_loss = []
-        for batch in zip(train_dataloader_kg, train_dataloader_tr):
-            batch_kg = batch[0].to(device)
-            batch_tr = batch[1].to(device)
-            loss_kg = model.get_loss_kg(batch_kg)
-            loss_tr = model.get_loss_tr(batch_tr)
-            loss = (cfg.lmbda * loss_kg + loss_tr) / (cfg.lmbda + 1)
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            avg_loss.append(loss.item())
-        avg_loss = round(sum(avg_loss)/len(avg_loss), 6)
-        # print(f'Loss: {avg_loss}')
-        if (epoch + 1) % cfg.valid_interval == 0:
-            labels = []
-            preds = []
-            with torch.no_grad():
-                model.eval()
-                for batch in test_dataloader:
-                    labels.append(batch[:, 1])
-                    batch = batch.to(device)
-                    preds.append(model.predict(batch))
-            labels, preds = torch.cat(labels).numpy(), torch.cat(preds).cpu().numpy().flatten()
-            auc = round(roc_auc_score(labels, preds), 4)
-            aupr = round(average_precision_score(labels, preds), 4)
-            precision, recall, thresholds = precision_recall_curve(labels, preds)
-            f1_scores = 2 * recall * precision / (recall + precision)
-            fmax = round(np.max(f1_scores), 4)
-            th = thresholds[np.argmax(f1_scores)]
-            print(f'AUC:{auc}\tAUPR:{aupr}\tFmax:{fmax}\tTh:{th}')
-            # precision, recall, f1 = get_f1(labels, preds)
-            # print(f'AUC:{auc}\tAUPR:{aupr}\tPrecision:{precision}\tRecall:{recall}\tF1:{f1}')
-            if (auc + aupr + fmax) > max_value:
-                max_value = (auc + aupr + fmax)
-                tolerance = cfg.tolerance
-            else:
-                tolerance -= 1
-            if tolerance == 0:
-                break
+    aucss = []
+    auprss = []
+    fmaxss = []
+    for fold in range(5):
+        e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict = read_data(cfg, fold=fold)
+        if fold == 0:
+            print(f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}')
+        train_dataset_kg = KnowledgeGraphDataset(e_dict, r_dict, train_data_kg, already_ts_dict, already_hs_dict, cfg.num_ng)
+        train_dataset_tr = TreatmentDataset(train_data_tr)
+        test_dataset = TreatmentDataset(test_data)
+        
+        train_dataloader_kg = torch.utils.data.DataLoader(dataset=train_dataset_kg, 
+                                                        batch_size=cfg.bs, 
+                                                        num_workers=cfg.num_workers, 
+                                                        shuffle=True, 
+                                                        drop_last=True)
+        train_dataloader_tr = torch.utils.data.DataLoader(dataset=train_dataset_tr, 
+                                                        batch_size=cfg.bs, 
+                                                        num_workers=cfg.num_workers, 
+                                                        shuffle=True, 
+                                                        drop_last=True)
+        test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset, 
+                                                        batch_size=cfg.bs//4, 
+                                                        num_workers=cfg.num_workers, 
+                                                        shuffle=False, 
+                                                        drop_last=False)    
+
+        model = DrugTreatmentPU(e_dict, r_dict, cfg)
+        model = model.to(device)
+        tolerance = cfg.tolerance
+        max_value = 0
+        optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr, weight_decay=cfg.wd)
+        if cfg.verbose == 1:
+            train_dataloader_kg = tqdm.tqdm(train_dataloader_kg)
+            train_dataloader_tr = tqdm.tqdm(train_dataloader_tr)
+            test_dataloader = tqdm.tqdm(test_dataloader)
+        aucs = []
+        auprs = []
+        fmaxs = []
+        for epoch in range(cfg.max_epochs):
+            # print(f'Epoch {epoch + 1}:')
+            model.train()
+            avg_loss = []
+            for batch in zip(train_dataloader_kg, train_dataloader_tr):
+                batch_kg = batch[0].to(device)
+                batch_tr = batch[1].to(device)
+                loss_kg = model.get_loss_kg(batch_kg)
+                loss_tr = model.get_loss_tr(batch_tr)
+                loss = (cfg.lmbda * loss_kg + loss_tr) / (cfg.lmbda + 1)
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+                avg_loss.append(loss.item())
+            avg_loss = round(sum(avg_loss)/len(avg_loss), 6)
+            # print(f'Loss: {avg_loss}')
+            if (epoch + 1) % cfg.valid_interval == 0:
+                labels = []
+                preds = []
+                with torch.no_grad():
+                    model.eval()
+                    for batch in test_dataloader:
+                        labels.append(batch[:, 1])
+                        batch = batch.to(device)
+                        preds.append(model.predict(batch))
+                labels, preds = torch.cat(labels).numpy(), torch.cat(preds).cpu().numpy().flatten()
+                auc = round(roc_auc_score(labels, preds), 4)
+                aupr = round(average_precision_score(labels, preds), 4)
+                precision, recall, thresholds = precision_recall_curve(labels, preds)
+                f1_scores = 2 * recall * precision / (recall + precision + 1e-10)
+                fmax = round(np.max(f1_scores), 4)
+                th = thresholds[np.argmax(f1_scores)]
+                # print(f'AUC:{auc}\tAUPR:{aupr}\tFmax:{fmax}\tTh:{th}')
+                aucs.append(auc)
+                auprs.append(aupr)
+                fmaxs.append(fmax)
+                # precision, recall, f1 = get_f1(labels, preds)
+                # print(f'AUC:{auc}\tAUPR:{aupr}\tPrecision:{precision}\tRecall:{recall}\tF1:{f1}')
+                if auc > max_value:
+                    max_value = auc
+                    tolerance = cfg.tolerance
+                else:
+                    tolerance -= 1
+                if tolerance == 0:
+                    break
+        max_index = aucs.index(max(aucs))
+        aucss.append(aucs[max_index])
+        auprss.append(auprs[max_index])
+        fmaxss.append(fmaxs[max_index])
+        print(f'AUC:{aucs[max_index]}\tAUPR:{auprs[max_index]}\tFmax:{fmaxs[max_index]}\tEpoch:{max_index * cfg.valid_interval}')
+    print(f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}')
 
