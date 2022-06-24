@@ -229,13 +229,13 @@ def parse_args(args=None):
     parser.add_argument('--dataset', default='KG', type=str)
     # Tunable
     # 32, 64, 128, 256, 512
-    parser.add_argument('--bs', default=256, type=int)
+    parser.add_argument('--bs', default=512, type=int)
     # 1e-1, 1e-2, 1e-3, 1e-4, 1e-5
-    parser.add_argument('--lr', default=0.001, type=float)
+    parser.add_argument('--lr', default=1e-1, type=float)
     parser.add_argument('--wd', default=0, type=float)
     parser.add_argument('--do', default=0.2, type=float)
     # 1e-1, 1e-2, 1e-3, 1e-4, 1e-5
-    parser.add_argument('--prior', default=0.01, type=float)
+    parser.add_argument('--prior', default=1e-2, type=float)
     # 16, 32, 64, 128, 256
     parser.add_argument('--emb_dim', default=128, type=int)
     parser.add_argument('--loss_type', default='pn', type=str)
@@ -281,7 +281,7 @@ if __name__ == '__main__':
                                                         shuffle=True, 
                                                         drop_last=True)
         train_dataloader_tr = torch.utils.data.DataLoader(dataset=train_dataset_tr, 
-                                                        batch_size=cfg.bs, 
+                                                        batch_size=cfg.bs//4, 
                                                         num_workers=cfg.num_workers, 
                                                         shuffle=True, 
                                                         drop_last=True)
@@ -339,8 +339,6 @@ if __name__ == '__main__':
                 aucs.append(auc)
                 auprs.append(aupr)
                 fmaxs.append(fmax)
-                # precision, recall, f1 = get_f1(labels, preds)
-                # print(f'AUC:{auc}\tAUPR:{aupr}\tPrecision:{precision}\tRecall:{recall}\tF1:{f1}')
                 if auc > max_value:
                     max_value = auc
                     tolerance = cfg.tolerance
