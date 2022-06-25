@@ -111,8 +111,8 @@ class DrugTreatmentPU(torch.nn.Module):
     def _DistMult(self, h_emb, r_emb, t_emb):
         return (h_emb * r_emb * t_emb).sum(dim=-1)
     
-    def _TranE(self, h_emb, r_emb, t_emb):
-        pass
+    def _TransE(self, h_emb, r_emb, t_emb):
+        return - torch.norm(h_emb + r_emb - t_emb, p=2, dim=-1)
     
     def _forward_kg(self, data):
         h_emb = self.e_embedding(data[:, :, 0])
@@ -120,6 +120,8 @@ class DrugTreatmentPU(torch.nn.Module):
         t_emb = self.e_embedding(data[:, :, 2])
         if self.base_model == 'DistMult':
             return self._DistMult(h_emb, r_emb, t_emb)
+        elif self.base_model == 'TransE':
+            return self._TransE(h_emb, r_emb, t_emb)
         else:
             raise ValueError
 
@@ -228,23 +230,22 @@ def parse_args(args=None):
     parser.add_argument('--root', default='../data/', type=str)
     parser.add_argument('--dataset', default='KG', type=str)
     # Tunable
-    # 32, 64, 128, 256, 512
+    # 64, 128, 256
     parser.add_argument('--bs', default=512, type=int)
-    # 1e-1, 1e-2, 1e-3, 1e-4, 1e-5
+    # 1e-2, 5e-3, 1e-3
     parser.add_argument('--lr', default=1e-1, type=float)
-    parser.add_argument('--wd', default=0, type=float)
-    parser.add_argument('--do', default=0.2, type=float)
     # 1e-1, 1e-2, 1e-3, 1e-4, 1e-5
     parser.add_argument('--prior', default=1e-2, type=float)
-    # 16, 32, 64, 128, 256
+    # 16, 32, 64
     parser.add_argument('--emb_dim', default=128, type=int)
-    parser.add_argument('--loss_type', default='pn', type=str)
-    # 2, 4, 8, 16, 32
-    parser.add_argument('--num_ng', default=4, type=int)
-    # 0.25, 0.5, 1, 2, 4
+    # 0.5, 1, 2
     parser.add_argument('--lmbda', default=4, type=float)
     # DistMult, TransE, ComplEx, SimplE, RotatE
     parser.add_argument('--base_model', default='DistMult', type=str)
+    parser.add_argument('--num_ng', default=4, type=int)
+    parser.add_argument('--wd', default=0, type=float)
+    parser.add_argument('--do', default=0.2, type=float)
+    parser.add_argument('--loss_type', default='pn', type=str)
     # Untunable
     parser.add_argument('--num_workers', default=0, type=int)
     parser.add_argument('--max_epochs', default=5000, type=int)

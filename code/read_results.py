@@ -14,8 +14,12 @@ def get_best_results(path):
     return ret[ret.max(dim=0)[1][0]]
 
 if __name__ == '__main__':
-    pn_best = get_best_results('./pn.log')
-    pu_best = get_best_results('./pu.log')
-    print(f'PN DistMult:{pn_best}')
-    print(f'PU DistMult:{pu_best}')
+    DistMult_pn = get_best_results('./DistMult_pn.log')
+    DistMult_pu = get_best_results('./DistMult_pu.log')
+    print(f'PN DistMult:{DistMult_pn}')
+    print(f'PU DistMult:{DistMult_pu}')
+    # TransE_pn = get_best_results('./TransE_pn.log')
+    # TransE_pu = get_best_results('./TransE_pu.log')
+    # print(f'PN TransE:{TransE_pn}')
+    # print(f'PU TransE:{TransE_pu}')
 
