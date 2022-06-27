@@ -103,15 +103,6 @@ class DrugTreatmentPU(torch.nn.Module):
         else:
             return self.prior * p_above
 
-    def pur_loss(self, pred):
-        p_above = - torch.nn.functional.logsigmoid(pred[:, 0]).mean()
-        p_below = - torch.nn.functional.logsigmoid(-pred[:, 0]).mean()
-        u = - torch.nn.functional.logsigmoid(pred[:, 0].unsqueeze(-1) - pred[:, 1:]).mean()
-        if u > self.prior * p_below:
-            return self.prior * p_above - self.prior * p_below + u
-        else:
-            return self.prior * p_above
-
     def pn_loss(self, pred):
         loss_pos = - torch.nn.functional.logsigmoid(pred[:, 0]).mean()
         loss_neg = - torch.log(1 - torch.sigmoid(pred[:, 1:]) + 1e-10).mean()
@@ -121,7 +112,7 @@ class DrugTreatmentPU(torch.nn.Module):
         return (h_emb * r_emb * t_emb).sum(dim=-1)
     
     def _TransE(self, h_emb, r_emb, t_emb):
-        return - torch.norm(h_emb + r_emb - t_emb, p=2, dim=-1)
+        return - torch.norm(h_emb + r_emb - t_emb, p=1, dim=-1)
     
     def _forward_kg(self, data):
         h_emb = self.e_embedding(data[:, :, 0])
@@ -140,8 +131,6 @@ class DrugTreatmentPU(torch.nn.Module):
             return self.pn_loss(pred)
         elif self.loss_type == 'pu':
             return self.pu_loss(pred)
-        elif self.loss_type == 'pur':
-            return self.pur_loss(pred)
         else:
             raise ValueError
 
