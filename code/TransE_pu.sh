@@ -8,11 +8,14 @@ do
         do
             for lmbda in 0.5 1 2
             do
-                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 1e-1 --gpu 0 --loss_type pu --base_model TransE
-                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 1e-2 --gpu 0 --loss_type pu --base_model TransE
-                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 1e-3 --gpu 0 --loss_type pu --base_model TransE
-                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 1e-4 --gpu 0 --loss_type pu --base_model TransE
-                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 1e-5 --gpu 0 --loss_type pu --base_model TransE
+              for scoring_fct_norm in 1 2
+              do
+                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --scoring_fct_norm $scoring_fct_norm --prior 1e-1 --gpu 0 --loss_type pu --base_model TransE
+                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --scoring_fct_norm $scoring_fct_norm --prior 1e-2 --gpu 0 --loss_type pu --base_model TransE
+                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --scoring_fct_norm $scoring_fct_norm --prior 1e-3 --gpu 0 --loss_type pu --base_model TransE
+                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --scoring_fct_norm $scoring_fct_norm --prior 1e-4 --gpu 0 --loss_type pu --base_model TransE
+                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --scoring_fct_norm $scoring_fct_norm --prior 1e-5 --gpu 0 --loss_type pu --base_model TransE
+              done
             done
         done 
     done
