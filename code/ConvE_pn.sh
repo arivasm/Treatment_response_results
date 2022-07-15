@@ -6,7 +6,7 @@ do
     do
         for lmbda in 0.5 1 2
         do
-          python main.py --bs $bs --lr $lr --lmbda $lmbda --gpu 1 --loss_type pn --base_model ConvE
+          python main.py --bs $bs --lr $lr --lmbda $lmbda --kernel_size 3 --out_channels 32 --emb_dim 200 --gpu 1 --loss_type pn --base_model ConvE
         done
     done
 done
