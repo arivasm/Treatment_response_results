@@ -211,7 +211,6 @@ class DrugTreatmentPU(torch.nn.Module):
         input_fc = self.dropout(out_conv)
         score = self.fc_layer(input_fc).view(-1)
         score = score.view(bs, -1)
-        # Then  view   the  output   again  by view(bs, -1) or view(-1, 1 + num_ng)  h_emb.shape[0]
         return -score
 
     def _ConvE(self, h_emb, r_emb, t_emb):
