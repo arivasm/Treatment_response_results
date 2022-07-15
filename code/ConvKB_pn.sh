@@ -8,7 +8,7 @@ do
         do
             for lmbda in 0.5 1 2
             do
-                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --gpu 1 --loss_type pn --base_model ConvKB
+                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --kernel_size 1 --out_channels 64 --gpu 1 --loss_type pn --base_model ConvKB
             done
         done 
     done

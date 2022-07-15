@@ -167,6 +167,7 @@ class DrugTreatmentPU(torch.nn.Module):
             return self.prior * p_above
 
     def pn_loss(self, pred):
+        # print('pred.shape:', pred.shape)
         loss_pos = - torch.nn.functional.logsigmoid(pred[:, 0]).mean()
         loss_neg = - torch.log(1 - torch.sigmoid(pred[:, 1:]) + 1e-10).mean()
         return (loss_pos + loss_neg) / 2
@@ -189,11 +190,16 @@ class DrugTreatmentPU(torch.nn.Module):
         return score.sum(dim=-1)
 
     def _ConvKB(self, h_emb, r_emb, t_emb):
-        h_emb = h_emb.unsqueeze(1)  # bs x 1 x dim
-        r_emb = r_emb.unsqueeze(1)
-        t_emb = t_emb.unsqueeze(1)
+        # print(h_emb.shape)
+        bs = h_emb.shape[0]
+        # h_emb = h_emb.unsqueeze(1)  # bs x 1 x dim
+        h_emb = h_emb.view(-1, h_emb.shape[2]).unsqueeze(1)
+        r_emb = r_emb.view(-1, r_emb.shape[2]).unsqueeze(1)
+        t_emb = t_emb.view(-1, t_emb.shape[2]).unsqueeze(1)
 
+        # print(h_emb.shape)
         conv_input = torch.cat([h_emb, r_emb, t_emb], 1)  # bs x 3 x dim
+        # print(conv_input.shape)
         conv_input = conv_input.transpose(1, 2)
         # To make tensor of size 4, where second dim is for input channels
         conv_input = conv_input.unsqueeze(1)
@@ -204,6 +210,8 @@ class DrugTreatmentPU(torch.nn.Module):
         out_conv = out_conv.view(-1, (self.hidden_size - self.kernel_size + 1) * self.out_channels)
         input_fc = self.dropout(out_conv)
         score = self.fc_layer(input_fc).view(-1)
+        score = score.view(bs, -1)
+        # Then  view   the  output   again  by view(bs, -1) or view(-1, 1 + num_ng)  h_emb.shape[0]
         return -score
 
     def _ConvE(self, h_emb, r_emb, t_emb):
@@ -301,7 +309,7 @@ class DrugTreatmentPU(torch.nn.Module):
         elif self.base_model == 'ConvKB':
             return self._ConvKB(h_emb, r_emb, t_emb)
         elif self.base_model == 'ConvE':
-            return self._ConvE(h_emb, r_emb, t_emb)
+            return self._ConvE(self.e_embedding, self.r_embedding, t_emb)
         elif self.base_model == 'RotatE':
             return self._RotatE(h_emb, r_emb, t_emb)
         else:
