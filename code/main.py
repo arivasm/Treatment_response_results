@@ -126,6 +126,8 @@ class DrugTreatmentPU(torch.nn.Module):
             self.e_embedding = torch.nn.Embedding(len(e_dict), embedding_size)
             self.r_embedding = torch.nn.Embedding(len(r_dict), embedding_size)
 
+            self.fc_1 = torch.nn.Linear(embedding_size, 1)
+
             self.conv_e = torch.nn.Sequential(
                 torch.nn.Dropout(p=self.embed_dropout),
                 torch.nn.Conv2d(in_channels=1, out_channels=self.out_channels, kernel_size=self.kernel_size),
@@ -141,16 +143,17 @@ class DrugTreatmentPU(torch.nn.Module):
             )
         elif cfg.base_model == 'RotatE':
             # === RotatE ===
-            self.margin = cfg.margin
+            # self.margin = cfg.margin
+            self.margin = torch.nn.Parameter(torch.Tensor([cfg.margin]), requires_grad=False)
             self.epsilon = cfg.epsilon
             self.e_embedding = torch.nn.Embedding(len(e_dict), self.emb_dim*2)
             self.r_embedding = torch.nn.Embedding(len(r_dict), self.emb_dim)
             self.rel_embedding_range = torch.nn.Parameter(
-                torch.Tensor([(self.margin + self.epsilon) / self.emb_dim]),
+                torch.Tensor([(self.margin.item() + self.epsilon) / self.emb_dim]),
                 requires_grad=False
             )
             self.pi_const = torch.nn.Parameter(torch.Tensor([3.14159265358979323846]))
-            # self.pi_const.requires_grad = False
+            self.fc_1 = torch.nn.Linear(self.emb_dim*2, 1)
 
         torch.nn.init.xavier_uniform_(self.fc_1.weight.data)
         # torch.nn.init.xavier_uniform_(self.fc_2.weight.data)
@@ -225,6 +228,28 @@ class DrugTreatmentPU(torch.nn.Module):
         return scores
 
     def _RotatE(self, h_emb, r_emb, t_emb):
+        pi = self.pi_const
+
+        re_head, im_head = torch.chunk(h_emb, 2, dim=2)
+        re_tail, im_tail = torch.chunk(t_emb, 2, dim=2)
+
+        phase_relation = r_emb / (self.rel_embedding_range.item() / pi)
+
+        re_relation = torch.cos(phase_relation)
+        im_relation = torch.sin(phase_relation)
+
+        re_score = re_head * re_relation - im_head * im_relation
+        im_score = re_head * im_relation + im_head * re_relation
+        re_score = re_score - re_tail
+        im_score = im_score - im_tail
+
+        score = torch.stack([re_score, im_score], dim=0)
+        score = score.norm(dim=0)
+
+        score = self.margin.item() - score.sum(dim=2)
+        return score
+
+    def _RotatE_v0(self, h_emb, r_emb, t_emb):
         pi = self.pi_const
 
         re_head, im_head = torch.chunk(h_emb, 2, dim=-1)
@@ -471,11 +496,18 @@ def parse_args(args=None):
     return parser.parse_args(args)
 
 
+def save_model_log(graph_ttl, name):
+    with open(name, 'a') as file:
+        file.write(graph_ttl)
+
+
 if __name__ == '__main__':
     cfg = parse_args()
+    model_log = 'Configurations:\n'
     print('Configurations:')
     for arg in vars(cfg):
         print(f'\t{arg}: {getattr(cfg, arg)}')
+        model_log = model_log + f'\t{arg}: {getattr(cfg, arg)}' + '\n'
     seed_everything(cfg.seed)
     device = torch.device(f'cuda:{cfg.gpu}' if torch.cuda.is_available() else 'cpu')
 
@@ -487,6 +519,7 @@ if __name__ == '__main__':
                                                                                                               fold=fold)
         if fold == 0:
             print(f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}')
+            model_log = model_log + f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}' + '\n'
         train_dataset_kg = KnowledgeGraphDataset(e_dict, r_dict, train_data_kg, already_ts_dict, already_hs_dict,
                                                  cfg.num_ng)
         train_dataset_tr = TreatmentDataset(train_data_tr)
@@ -569,5 +602,7 @@ if __name__ == '__main__':
         fmaxss.append(fmaxs[max_index])
         print(
             f'AUC:{aucs[max_index]}\tAUPR:{auprs[max_index]}\tFmax:{fmaxs[max_index]}\tEpoch:{max_index * cfg.valid_interval}')
-    print(
-        f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}')
+        model_log = model_log + f'AUC:{aucs[max_index]}\tAUPR:{auprs[max_index]}\tFmax:{fmaxs[max_index]}\tEpoch:{max_index * cfg.valid_interval}' + '\n'
+    print(f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}')
+    model_log = model_log + f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}' + '\n'
+    save_model_log(model_log, cfg.base_model+'_'+cfg.loss_type+'.log')
