@@ -109,38 +109,6 @@ class DrugTreatmentPU(torch.nn.Module):
         elif cfg.base_model == 'TransH':
             #  === TransH ===
             self.norm_vector = torch.nn.Embedding(len(r_dict), cfg.emb_dim)
-        elif cfg.base_model == 'ConvE':
-            # === ConvE ===
-            self.embedding_size_w = cfg.embedding_size_w
-            self.embedding_size_h = cfg.embedding_size_h
-            embedding_size = self.embedding_size_h * self.embedding_size_w
-            self.hidden_size = embedding_size
-            self.kernel_size = cfg.kernel_size
-            self.out_channels = cfg.out_channels
-            self.embed_dropout = cfg.embed_dropout
-            self.feature_map_dropout = cfg.feature_map_dropout
-            self.proj_layer_dropout = cfg.proj_layer_dropout
-
-            flattened_size = (self.embedding_size_w * 2 - self.kernel_size + 1) * \
-                             (self.embedding_size_h - self.kernel_size + 1) * self.out_channels
-            self.e_embedding = torch.nn.Embedding(len(e_dict), embedding_size)
-            self.r_embedding = torch.nn.Embedding(len(r_dict), embedding_size)
-
-            self.fc_1 = torch.nn.Linear(embedding_size, 1)
-
-            self.conv_e = torch.nn.Sequential(
-                torch.nn.Dropout(p=self.embed_dropout),
-                torch.nn.Conv2d(in_channels=1, out_channels=self.out_channels, kernel_size=self.kernel_size),
-                torch.nn.ReLU(),
-                torch.nn.BatchNorm2d(num_features=self.out_channels),
-                torch.nn.Dropout2d(p=self.feature_map_dropout),
-
-                Flatten(),
-                torch.nn.Linear(in_features=flattened_size, out_features=embedding_size),
-                torch.nn.ReLU(),
-                torch.nn.BatchNorm1d(num_features=embedding_size),
-                torch.nn.Dropout(p=self.proj_layer_dropout)
-            )
         elif cfg.base_model == 'RotatE':
             # === RotatE ===
             # self.margin = cfg.margin
@@ -187,11 +155,6 @@ class DrugTreatmentPU(torch.nn.Module):
         t_emb = self._transfer(t_emb, r_norm)
         return - torch.norm(h_emb + r_emb - t_emb, p=self.scoring_fct_norm, dim=-1)
 
-    def _HolE(self, h_emb, r_emb, t_emb):
-        score = self._ccorr(h_emb, t_emb) * r_emb
-        # return torch.sum(score, -1).flatten()
-        return score.sum(dim=-1)
-
     def _ConvKB(self, h_emb, r_emb, t_emb):
         # print(h_emb.shape)
         bs = h_emb.shape[0]
@@ -216,20 +179,8 @@ class DrugTreatmentPU(torch.nn.Module):
         score = score.view(bs, -1)
         return -score
 
-    def _ConvE(self, h_emb, r_emb, t_emb):
-        embed_e = h_emb #torch.cat((h_emb, t_emb), 0)
-        embed_s = embed_e.view(-1, self.embedding_size_w, self.embedding_size_h)
-        embed_r = r_emb.view(-1, self.embedding_size_w, self.embedding_size_h)
-        # print('embed_s:', embed_s.shape, 'embed_r:', embed_r.shape)
-        conv_input = torch.cat([embed_s, embed_r], dim=1).unsqueeze(1)
-        out = self.conv_e(conv_input)
-
-        scores = out.mm(self.e_embedding.weight.t())
-        return scores
-
     def _RotatE(self, h_emb, r_emb, t_emb):
         pi = self.pi_const
-
         re_head, im_head = torch.chunk(h_emb, 2, dim=2)
         re_tail, im_tail = torch.chunk(t_emb, 2, dim=2)
 
@@ -248,65 +199,6 @@ class DrugTreatmentPU(torch.nn.Module):
 
         score = self.margin.item() - score.sum(dim=2)
         return score
-
-    def _RotatE_v0(self, h_emb, r_emb, t_emb):
-        pi = self.pi_const
-
-        re_head, im_head = torch.chunk(h_emb, 2, dim=-1)
-        re_tail, im_tail = torch.chunk(t_emb, 2, dim=-1)
-
-        phase_relation = r_emb / (self.rel_embedding_range.item() / pi)
-
-        re_relation = torch.cos(phase_relation)
-        im_relation = torch.sin(phase_relation)
-
-        re_head = re_head.view(-1, re_relation.shape[0], re_head.shape[-1]).permute(1, 0, 2)
-        re_tail = re_tail.view(-1, re_relation.shape[0], re_tail.shape[-1]).permute(1, 0, 2)
-        im_head = im_head.view(-1, re_relation.shape[0], im_head.shape[-1]).permute(1, 0, 2)
-        im_tail = im_tail.view(-1, re_relation.shape[0], im_tail.shape[-1]).permute(1, 0, 2)
-        im_relation = im_relation.view(-1, re_relation.shape[0], im_relation.shape[-1]).permute(1, 0, 2)
-        re_relation = re_relation.view(-1, re_relation.shape[0], re_relation.shape[-1]).permute(1, 0, 2)
-
-        re_score = re_head * re_relation - im_head * im_relation
-        im_score = re_head * im_relation + im_head * re_relation
-        re_score = re_score - re_tail
-        im_score = im_score - im_tail
-
-        score = torch.stack([re_score, im_score], dim=0)
-        score = score.norm(dim=0).sum(dim=-1)
-        return self.margin - score.permute(1, 0).flatten()
-
-
-    def _conj(self, tensor):
-        zero_shape = (list)(tensor.shape)
-        one_shape = (list)(tensor.shape)
-        zero_shape[-1] = 1
-        one_shape[-1] -= 1
-        ze = torch.zeros(size=zero_shape, device=tensor.device)
-        on = torch.ones(size=one_shape, device=tensor.device)
-        matrix = torch.cat([ze, on], -1)
-        matrix = 2 * matrix
-        return tensor - matrix * tensor
-
-    def _real(self, tensor):
-        dimensions = len(tensor.shape)
-        return tensor.narrow(dimensions - 1, 0, 1)
-
-    def _imag(self, tensor):
-        dimensions = len(tensor.shape)
-        return tensor.narrow(dimensions - 1, 1, 1)
-
-    def _mul(self, real_1, imag_1, real_2, imag_2):
-        real = real_1 * real_2 - imag_1 * imag_2
-        imag = real_1 * imag_2 + imag_1 * real_2
-        return torch.cat([real, imag], -1)
-
-    def _ccorr(self, a, b):
-        a = self._conj(torch.view_as_real(torch.fft.fft(a, dim=1)))
-        b = torch.view_as_real(torch.fft.fft(b, dim=1))
-        res = self._mul(self._real(a), self._imag(a), self._real(b), self._imag(b))
-        res = torch.fft.ifft(res, dim=1)
-        return self._real(res).flatten(start_dim=-2)
 
     def _transfer(self, e, norm):
         norm = torch.nn.functional.normalize(norm, p=2, dim=-1)
@@ -328,12 +220,8 @@ class DrugTreatmentPU(torch.nn.Module):
             return self._TransE(h_emb, r_emb, t_emb)
         elif self.base_model == 'TransH':
             return self._TransH(h_emb, r_emb, t_emb, data)
-        elif self.base_model == 'HolE':
-            return self._HolE(h_emb, r_emb, t_emb)
         elif self.base_model == 'ConvKB':
             return self._ConvKB(h_emb, r_emb, t_emb)
-        elif self.base_model == 'ConvE':
-            return self._ConvE(self.e_embedding, self.r_embedding, t_emb)
         elif self.base_model == 'RotatE':
             return self._RotatE(h_emb, r_emb, t_emb)
         else:
@@ -464,22 +352,16 @@ def parse_args(args=None):
     parser.add_argument('--emb_dim', default=200, type=int)
     # 0.5, 1, 2
     parser.add_argument('--lmbda', default=4, type=float)
-    # DistMult, TransE, ComplEx, SimplE, RotatE
+    # DistMult, TransE, TransH, ConvKB, RotatE
     parser.add_argument('--base_model', default='DistMult', type=str)
     parser.add_argument('--num_ng', default=4, type=int)
     parser.add_argument('--wd', default=0, type=float)
     parser.add_argument('--do', default=0.2, type=float)
     parser.add_argument('--loss_type', default='pn', type=str)
     parser.add_argument('--scoring_fct_norm', default=1, type=float)    # TransE, TransH
-    parser.add_argument('--kernel_size', default=3, type=int)           # ConvKB = 1 ConvE = 3
+    parser.add_argument('--kernel_size', default=3, type=int)           # ConvKB = 1
     parser.add_argument('--convkb_drop_prob', default=0.5, type=float)  # ConvKB
-    parser.add_argument('--out_channels', default=32, type=int)         # ConvKB = 64 ConvE = 32
-    # === ConvE ===
-    parser.add_argument('--embedding_size_w', default=10, type=int)
-    parser.add_argument('--embedding_size_h', default=20, type=int)
-    parser.add_argument('--embed_dropout', default=0.2, type=float)
-    parser.add_argument('--feature_map_dropout', default=0.2, type=float)
-    parser.add_argument('--proj_layer_dropout', default=0.3, type=float)
+    parser.add_argument('--out_channels', default=32, type=int)         # ConvKB = 64
     # === RotatE ===
     parser.add_argument('--margin', default=6.0, type=float)
     parser.add_argument('--epsilon', default=2.0, type=float)
