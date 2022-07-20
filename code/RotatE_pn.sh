@@ -8,7 +8,7 @@ do
         do
             for lmbda in 0.5 1 2
             do
-              python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --gpu 1 --loss_type pn --base_model RotatE
+              python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --gpu 0 --loss_type pn --base_model RotatE
             done
         done 
     done
