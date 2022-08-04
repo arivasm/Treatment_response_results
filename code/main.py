@@ -32,12 +32,12 @@ def seed_everything(seed):
 
 class KnowledgeGraphDataset(torch.utils.data.Dataset):
     def __init__(self,
-                 e_dict,
-                 r_dict,
-                 train_data,
-                 already_ts_dict,
-                 already_hs_dict,
-                 num_ng):
+                e_dict,
+                r_dict,
+                train_data,
+                already_ts_dict,
+                already_hs_dict,
+                num_ng):
         super().__init__()
         self.e_dict = e_dict
         self.r_dict = r_dict
@@ -178,7 +178,7 @@ class DrugTreatmentPU(torch.nn.Module):
         input_fc = self.dropout(out_conv)
         score = self.fc_layer(input_fc).view(-1)
         score = score.view(bs, -1)
-        return -score
+        return score
 
     def _RotatE(self, h_emb, r_emb, t_emb):
         pi = self.pi_const
@@ -267,51 +267,16 @@ class Flatten(torch.nn.Module):
         return x
 
 
-def generate_folds(cfg):
-    kg_data = []
-    tr_data = []
-    with open(cfg.root + cfg.dataset + '/G2.ttl') as f:
-        for line in f:
-            line = line.strip().split('\t')
-            if line[1] == 'ex:belong_to':
-                if line[2] == 'ex:effective':
-                    tr_data.append([line[0], 1])
-                elif line[2] == 'ex:low_effect':
-                    tr_data.append([line[0], 0])
-                else:
-                    kg_data.append(line)
-            elif line[1] == 'ex:no_belong_to':
-                if line[2] == 'ex:low_effect':
-                    tr_data.append([line[0], 1])
-                elif line[2] == 'ex:effective':
-                    tr_data.append([line[0], 0])
-                else:
-                    kg_data.append(line)
-            else:
-                kg_data.append(line)
-
-    kg_data = pd.DataFrame(kg_data, columns=['h', 'r', 't'])
-    tr_data = pd.DataFrame(tr_data, columns=['tr', 'label']).drop_duplicates()
-    kf = KFold(n_splits=5, shuffle=True)
-    for i in range(5):
-        result = next(kf.split(tr_data), None)
-        train_data_tr, test_data = tr_data.iloc[result[0]], tr_data.iloc[result[1]]
-        train_data_tr.to_csv(cfg.root + cfg.dataset + '/train_data_tr_' + str(i) + '.csv')
-        test_data.to_csv(cfg.root + cfg.dataset + '/test_data_' + str(i) + '.csv')
-    kg_data.to_csv(cfg.root + cfg.dataset + '/train_data_kg.csv')
-    return kg_data
-
-
 def read_data(cfg, fold):
-    if cfg.cached == 1:
-        train_data_kg = pd.read_csv(cfg.root + cfg.dataset + '/train_data_kg.csv', index_col=0)
-    elif cfg.cached == 0:
-        train_data_kg = generate_folds(cfg)
+    if cfg.graph == 2:
+        train_data_kg = pd.read_csv(cfg.root + '/train_data_kg_G2.csv', index_col=0)
+    elif cfg.graph == 1:
+        train_data_kg = pd.read_csv(cfg.root + '/train_data_kg_G1.csv', index_col=0)
     else:
         raise ValueError
-
-    train_data_tr = pd.read_csv(cfg.root + cfg.dataset + '/train_data_tr_' + str(fold) + '.csv', index_col=0)
-    test_data = pd.read_csv(cfg.root + cfg.dataset + '/test_data_' + str(fold) + '.csv', index_col=0)
+        
+    train_data_tr = pd.read_csv(cfg.root + '/train_data_tr_' + str(fold) + '.csv', index_col=0)
+    test_data = pd.read_csv(cfg.root + '/test_data_' + str(fold) + '.csv', index_col=0)
 
     all_e = set(train_data_kg['h'].unique()) | set(train_data_kg['t'].unique()) | set(
         train_data_tr['tr'].unique()) | set(test_data['tr'].unique())
@@ -341,17 +306,12 @@ def read_data(cfg, fold):
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', default='../data/', type=str)
-    parser.add_argument('--dataset', default='KG', type=str)
+    parser.add_argument('--graph', default=1, type=int)
     # Tunable
-    # 64, 128, 256
     parser.add_argument('--bs', default=512, type=int)
-    # 1e-2, 5e-3, 1e-3
     parser.add_argument('--lr', default=1e-1, type=float)
-    # 1e-1, 1e-2, 1e-3, 1e-4, 1e-5
     parser.add_argument('--prior', default=1e-2, type=float)
-    # 16, 32, 64
     parser.add_argument('--emb_dim', default=200, type=int)
-    # 0.5, 1, 2
     parser.add_argument('--lmbda', default=4, type=float)
     # DistMult, TransE, TransH, ConvKB, RotatE
     parser.add_argument('--base_model', default='DistMult', type=str)
@@ -359,11 +319,10 @@ def parse_args(args=None):
     parser.add_argument('--wd', default=0, type=float)
     parser.add_argument('--do', default=0.2, type=float)
     parser.add_argument('--loss_type', default='pn', type=str)
-    parser.add_argument('--scoring_fct_norm', default=1, type=float)    # TransE, TransH
-    parser.add_argument('--kernel_size', default=3, type=int)           # ConvKB = 1
-    parser.add_argument('--convkb_drop_prob', default=0.5, type=float)  # ConvKB
-    parser.add_argument('--out_channels', default=32, type=int)         # ConvKB = 64
-    # === RotatE ===
+    parser.add_argument('--scoring_fct_norm', default=1, type=float)   
+    parser.add_argument('--kernel_size', default=3, type=int)          
+    parser.add_argument('--convkb_drop_prob', default=0.5, type=float)  
+    parser.add_argument('--out_channels', default=32, type=int)        
     parser.add_argument('--margin', default=6.0, type=float)
     parser.add_argument('--epsilon', default=2.0, type=float)
 
@@ -375,7 +334,6 @@ def parse_args(args=None):
     parser.add_argument('--valid_interval', default=5, type=int)
     parser.add_argument('--verbose', default=0, type=int)
     parser.add_argument('--tolerance', default=20, type=int)
-    parser.add_argument('--cached', default=1, type=int)
     return parser.parse_args(args)
 
 
@@ -404,30 +362,30 @@ if __name__ == '__main__':
     fmaxss = []
     for fold in range(5):
         e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict = read_data(cfg,
-                                                                                                              fold=fold)
+                                                                                                            fold=fold)
         if fold == 0:
             print(f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}')
             model_log = model_log + f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}' + '\n'
         train_dataset_kg = KnowledgeGraphDataset(e_dict, r_dict, train_data_kg, already_ts_dict, already_hs_dict,
-                                                 cfg.num_ng)
+                                                cfg.num_ng)
         train_dataset_tr = TreatmentDataset(train_data_tr)
         test_dataset = TreatmentDataset(test_data)
 
         train_dataloader_kg = torch.utils.data.DataLoader(dataset=train_dataset_kg,
-                                                          batch_size=cfg.bs,
-                                                          num_workers=cfg.num_workers,
-                                                          shuffle=True,
-                                                          drop_last=True)
+                                                        batch_size=cfg.bs,
+                                                        num_workers=cfg.num_workers,
+                                                        shuffle=True,
+                                                        drop_last=True)
         train_dataloader_tr = torch.utils.data.DataLoader(dataset=train_dataset_tr,
-                                                          batch_size=cfg.bs // 4,
-                                                          num_workers=cfg.num_workers,
-                                                          shuffle=True,
-                                                          drop_last=True)
+                                                        batch_size=cfg.bs // 4,
+                                                        num_workers=cfg.num_workers,
+                                                        shuffle=True,
+                                                        drop_last=True)
         test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset,
-                                                      batch_size=cfg.bs // 4,
-                                                      num_workers=cfg.num_workers,
-                                                      shuffle=False,
-                                                      drop_last=False)
+                                                    batch_size=cfg.bs // 4,
+                                                    num_workers=cfg.num_workers,
+                                                    shuffle=False,
+                                                    drop_last=False)
 
         model = DrugTreatmentPU(e_dict, r_dict, cfg)
         model = model.to(device)
@@ -501,4 +459,4 @@ if __name__ == '__main__':
 
     print(f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}')
     model_log = model_log + f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}' + '\n'
-    save_model_log(model_log, cfg.base_model+'_'+cfg.loss_type+'.log')
+    # save_model_log(model_log, cfg.base_model+'_'+cfg.loss_type+'.log')
