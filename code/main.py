@@ -13,6 +13,7 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.model_selection import KFold
 
 from numpy import fft
+import pickle
 
 from warnings import filterwarnings
 
@@ -383,6 +384,11 @@ def save_model_log(graph_ttl, name):
         file.write(graph_ttl)
 
 
+def save_embedding(dict_emb_e):
+    with open('embedding_e.pkl', 'wb') as f:
+        pickle.dump(dict_emb_e, f)
+
+
 if __name__ == '__main__':
     cfg = parse_args()
     model_log = 'Configurations:\n'
@@ -442,6 +448,8 @@ if __name__ == '__main__':
             for batch in zip(train_dataloader_kg, train_dataloader_tr):
                 batch_kg = batch[0].to(device)
                 batch_tr = batch[1].to(device)
+                # print('batch_kg:', batch_kg)
+                # print('batch_tr:', batch_tr)
                 loss_kg = model.get_loss_kg(batch_kg)
                 loss_tr = model.get_loss_tr(batch_tr)
                 loss = (cfg.lmbda * loss_kg + loss_tr) / (cfg.lmbda + 1)
@@ -485,6 +493,12 @@ if __name__ == '__main__':
         print(
             f'AUC:{aucs[max_index]}\tAUPR:{auprs[max_index]}\tFmax:{fmaxs[max_index]}\tEpoch:{max_index * cfg.valid_interval}')
         model_log = model_log + f'AUC:{aucs[max_index]}\tAUPR:{auprs[max_index]}\tFmax:{fmaxs[max_index]}\tEpoch:{max_index * cfg.valid_interval}' + '\n'
+
+        # dict_emb_e = dict(zip(e_dict.keys(), model.e_embedding.weight.data.cpu().detach().numpy()))
+        # print(dict_emb_e)
+        # save_embedding(dict_emb_e)
+        # break
+
     print(f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}')
     model_log = model_log + f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}' + '\n'
     save_model_log(model_log, cfg.base_model+'_'+cfg.loss_type+'.log')
