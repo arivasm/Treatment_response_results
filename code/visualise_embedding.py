@@ -92,7 +92,7 @@ if __name__ == '__main__':
     dict_emb_e = load_embedding()
     # print(dict_emb_e)
 
-    g = load_rdf_graph('data/', 'G1.ttl')
+    g = load_rdf_graph('data/T_KG/', 'G1.ttl')
     treatment_response = get_treatment_response(g)
 
     emb_treatment = df_embeding_treatment(treatment_response, dict_emb_e)
