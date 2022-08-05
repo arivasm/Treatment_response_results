@@ -13,8 +13,8 @@ do
                 python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 5e-4 --gpu 0 --loss_type pu --base_model DistMult --graph 2
                 python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 5e-5 --gpu 0 --loss_type pu --base_model DistMult --graph 2
                 python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 5e-6 --gpu 0 --loss_type pu --base_model DistMult --graph 2
-                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 1e-6 --gpu 0 --loss_type pu --base_model DistMult --graph 2
                 python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 5e-7 --gpu 0 --loss_type pu --base_model DistMult --graph 2
+                python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 1e-6 --gpu 0 --loss_type pu --base_model DistMult --graph 2
                 python main.py --bs $bs --lr $lr --emb_dim $emb_dim --lmbda $lmbda --prior 1e-7 --gpu 0 --loss_type pu --base_model DistMult --graph 2
             done
         done 

@@ -11,11 +11,24 @@ def get_best_results(path):
                     ret_line.append(float(part.split(':')[-1]))
                 ret.append(ret_line)
     ret = torch.tensor(ret)
-    return ret[ret.max(dim=0)[1][0]]
+    return ret[ret.max(dim=0)[1][0]].numpy()
 
 if __name__ == '__main__':
-    pn = get_best_results('../log/DistMult_pn_G2.log')
-    pu = get_best_results('../log/DistMult_pu_G2.log')
-    print(f'PN DistMult G2:{pn}')
-    print(f'PU DistMult G2:{pu}')
+    transE = get_best_results('../log/TransE_pn_G1.log')
+    transH = get_best_results('../log/TransH_pn_G1.log')
+    rotatE = get_best_results('../log/RotatE_pn_G1.log')
+    convkb = get_best_results('../log/ConvKB_pn_G1.log')
+    print(f'PN TransE G1:{transE}')
+    print(f'PN TransH G1:{transH}')
+    print(f'PN RotatE G1:{rotatE}')
+    print(f'PN ConvKB G1:{convkb}')
+    
+    pn_G1 = get_best_results('../log/DistMult_pn_G1.log')
+    pn_G2 = get_best_results('../log/DistMult_pn_G2.log')
+    pu_G1 = get_best_results('../log/DistMult_pu_G1.log')
+    pu_G2 = get_best_results('../log/DistMult_pu_G2.log')
+    print(f'PN DistMult G1:{pn_G1}')
+    print(f'PN DistMult G2:{pn_G2}')
+    print(f'PU DistMult G1:{pu_G1}')
+    print(f'PU DistMult G2:{pu_G2}')
 
