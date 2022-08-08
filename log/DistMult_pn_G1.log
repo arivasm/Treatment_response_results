@@ -1,0 +1,2755 @@
+nohup: ignoring input
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6484	AUPR:0.3683	Fmax:0.4783	Epoch:5
+AUC:0.5458	AUPR:0.3331	Fmax:0.45	Epoch:0
+AUC:0.6096	AUPR:0.3827	Fmax:0.5043	Epoch:0
+AUC:0.4762	AUPR:0.2604	Fmax:0.3846	Epoch:45
+AUC:0.5131	AUPR:0.2464	Fmax:0.3818	Epoch:25
+AVG# AUC:0.5586	AUPR:0.3182	Fmax:0.4398
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6658	AUPR:0.357	Fmax:0.5106	Epoch:5
+AUC:0.6129	AUPR:0.4321	Fmax:0.4727	Epoch:0
+AUC:0.5788	AUPR:0.296	Fmax:0.5091	Epoch:5
+AUC:0.56	AUPR:0.2475	Fmax:0.419	Epoch:85
+AUC:0.5557	AUPR:0.3202	Fmax:0.4054	Epoch:5
+AVG# AUC:0.5946	AUPR:0.3306	Fmax:0.4634
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.614	AUPR:0.3615	Fmax:0.4471	Epoch:0
+AUC:0.5612	AUPR:0.341	Fmax:0.4615	Epoch:0
+AUC:0.4692	AUPR:0.2944	Fmax:0.4427	Epoch:40
+AUC:0.5445	AUPR:0.2527	Fmax:0.4186	Epoch:130
+AUC:0.5073	AUPR:0.2542	Fmax:0.3833	Epoch:0
+AVG# AUC:0.5392	AUPR:0.3008	Fmax:0.4306
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.5538	AUPR:0.2741	Fmax:0.4262	Epoch:10
+AUC:0.5288	AUPR:0.2949	Fmax:0.438	Epoch:0
+AUC:0.7271	AUPR:0.4973	Fmax:0.5556	Epoch:0
+AUC:0.4809	AUPR:0.2467	Fmax:0.3826	Epoch:10
+AUC:0.5058	AUPR:0.2305	Fmax:0.3889	Epoch:5
+AVG# AUC:0.5593	AUPR:0.3087	Fmax:0.4383
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6457	AUPR:0.386	Fmax:0.4667	Epoch:0
+AUC:0.5733	AUPR:0.3361	Fmax:0.4706	Epoch:5
+AUC:0.6283	AUPR:0.425	Fmax:0.4762	Epoch:0
+AUC:0.4678	AUPR:0.2052	Fmax:0.3968	Epoch:20
+AUC:0.4927	AUPR:0.2171	Fmax:0.3664	Epoch:10
+AVG# AUC:0.5616	AUPR:0.3139	Fmax:0.4353
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.5895	AUPR:0.3104	Fmax:0.4571	Epoch:0
+AUC:0.5888	AUPR:0.329	Fmax:0.4946	Epoch:0
+AUC:0.6154	AUPR:0.348	Fmax:0.4865	Epoch:10
+AUC:0.4984	AUPR:0.2382	Fmax:0.3704	Epoch:95
+AUC:0.5567	AUPR:0.2403	Fmax:0.4211	Epoch:175
+AVG# AUC:0.5698	AUPR:0.2932	Fmax:0.4459
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.5752	AUPR:0.3269	Fmax:0.4752	Epoch:0
+AUC:0.4746	AUPR:0.3091	Fmax:0.4394	Epoch:0
+AUC:0.6717	AUPR:0.4182	Fmax:0.5075	Epoch:0
+AUC:0.4795	AUPR:0.2347	Fmax:0.3817	Epoch:35
+AUC:0.4898	AUPR:0.2114	Fmax:0.3846	Epoch:5
+AVG# AUC:0.5382	AUPR:0.3001	Fmax:0.4377
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.5966	AUPR:0.353	Fmax:0.4615	Epoch:5
+AUC:0.5192	AUPR:0.3178	Fmax:0.4516	Epoch:0
+AUC:0.5429	AUPR:0.322	Fmax:0.458	Epoch:5
+AUC:0.568	AUPR:0.2556	Fmax:0.4124	Epoch:140
+AUC:0.5509	AUPR:0.3266	Fmax:0.396	Epoch:10
+AVG# AUC:0.5555	AUPR:0.315	Fmax:0.4359
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.5984	AUPR:0.3703	Fmax:0.4842	Epoch:0
+AUC:0.5504	AUPR:0.3762	Fmax:0.4602	Epoch:90
+AUC:0.6263	AUPR:0.3746	Fmax:0.4894	Epoch:15
+AUC:0.5539	AUPR:0.2844	Fmax:0.4225	Epoch:0
+AUC:0.5615	AUPR:0.3486	Fmax:0.3871	Epoch:0
+AVG# AUC:0.5781	AUPR:0.3508	Fmax:0.4487
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6943	AUPR:0.4364	Fmax:0.4898	Epoch:5
+AUC:0.4967	AUPR:0.2654	Fmax:0.4538	Epoch:0
+AUC:0.6267	AUPR:0.375	Fmax:0.4932	Epoch:0
+AUC:0.5087	AUPR:0.2219	Fmax:0.4074	Epoch:120
+AUC:0.5523	AUPR:0.2818	Fmax:0.3855	Epoch:25
+AVG# AUC:0.5757	AUPR:0.3161	Fmax:0.4459
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6176	AUPR:0.3536	Fmax:0.4384	Epoch:5
+AUC:0.5017	AUPR:0.267	Fmax:0.4724	Epoch:75
+AUC:0.6833	AUPR:0.4395	Fmax:0.5278	Epoch:0
+AUC:0.5572	AUPR:0.3676	Fmax:0.3934	Epoch:155
+AUC:0.608	AUPR:0.3375	Fmax:0.4255	Epoch:0
+AVG# AUC:0.5936	AUPR:0.353	Fmax:0.4515
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6122	AUPR:0.3142	Fmax:0.4632	Epoch:5
+AUC:0.5642	AUPR:0.36	Fmax:0.4471	Epoch:0
+AUC:0.6092	AUPR:0.3282	Fmax:0.4954	Epoch:0
+AUC:0.4607	AUPR:0.2383	Fmax:0.3731	Epoch:10
+AUC:0.4927	AUPR:0.2106	Fmax:0.3932	Epoch:20
+AVG# AUC:0.5478	AUPR:0.2903	Fmax:0.4344
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6006	AUPR:0.3416	Fmax:0.4386	Epoch:5
+AUC:0.6083	AUPR:0.3266	Fmax:0.5263	Epoch:0
+AUC:0.6212	AUPR:0.3577	Fmax:0.4952	Epoch:5
+AUC:0.4475	AUPR:0.2067	Fmax:0.3846	Epoch:140
+AUC:0.4675	AUPR:0.2127	Fmax:0.3582	Epoch:20
+AVG# AUC:0.549	AUPR:0.2891	Fmax:0.4406
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6756	AUPR:0.4059	Fmax:0.4902	Epoch:5
+AUC:0.6508	AUPR:0.3979	Fmax:0.5122	Epoch:0
+AUC:0.66	AUPR:0.3895	Fmax:0.5143	Epoch:5
+AUC:0.3972	AUPR:0.1886	Fmax:0.3866	Epoch:20
+AUC:0.5145	AUPR:0.2121	Fmax:0.4	Epoch:15
+AVG# AUC:0.5796	AUPR:0.3188	Fmax:0.4607
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6131	AUPR:0.3136	Fmax:0.4528	Epoch:5
+AUC:0.6238	AUPR:0.3584	Fmax:0.5143	Epoch:0
+AUC:0.6204	AUPR:0.3207	Fmax:0.5047	Epoch:5
+AUC:0.4075	AUPR:0.1887	Fmax:0.3759	Epoch:0
+AUC:0.5228	AUPR:0.2301	Fmax:0.3826	Epoch:0
+AVG# AUC:0.5575	AUPR:0.2823	Fmax:0.4461
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6229	AUPR:0.3478	Fmax:0.4425	Epoch:5
+AUC:0.5679	AUPR:0.3347	Fmax:0.4737	Epoch:100
+AUC:0.6196	AUPR:0.3381	Fmax:0.5111	Epoch:15
+AUC:0.4922	AUPR:0.2985	Fmax:0.3788	Epoch:5
+AUC:0.5887	AUPR:0.3498	Fmax:0.4062	Epoch:0
+AVG# AUC:0.5783	AUPR:0.3338	Fmax:0.4425
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.614	AUPR:0.3353	Fmax:0.4587	Epoch:0
+AUC:0.5237	AUPR:0.3084	Fmax:0.4348	Epoch:0
+AUC:0.6521	AUPR:0.4369	Fmax:0.5149	Epoch:0
+AUC:0.5849	AUPR:0.3007	Fmax:0.4545	Epoch:15
+AUC:0.5262	AUPR:0.2384	Fmax:0.3908	Epoch:0
+AVG# AUC:0.5802	AUPR:0.3239	Fmax:0.4507
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6323	AUPR:0.3625	Fmax:0.4571	Epoch:5
+AUC:0.4996	AUPR:0.2781	Fmax:0.459	Epoch:0
+AUC:0.5583	AUPR:0.3961	Fmax:0.4466	Epoch:5
+AUC:0.5991	AUPR:0.2869	Fmax:0.451	Epoch:5
+AUC:0.5296	AUPR:0.2442	Fmax:0.4	Epoch:0
+AVG# AUC:0.5638	AUPR:0.3136	Fmax:0.4427
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6104	AUPR:0.372	Fmax:0.4571	Epoch:5
+AUC:0.55	AUPR:0.3306	Fmax:0.4538	Epoch:20
+AUC:0.6183	AUPR:0.3714	Fmax:0.5253	Epoch:60
+AUC:0.5572	AUPR:0.279	Fmax:0.4304	Epoch:5
+AUC:0.5523	AUPR:0.2546	Fmax:0.4286	Epoch:130
+AVG# AUC:0.5776	AUPR:0.3215	Fmax:0.459
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.627	AUPR:0.3658	Fmax:0.4685	Epoch:100
+AUC:0.565	AUPR:0.3412	Fmax:0.4381	Epoch:0
+AUC:0.5988	AUPR:0.3338	Fmax:0.4952	Epoch:30
+AUC:0.6108	AUPR:0.304	Fmax:0.4468	Epoch:5
+AUC:0.5315	AUPR:0.2848	Fmax:0.3878	Epoch:140
+AVG# AUC:0.5866	AUPR:0.3259	Fmax:0.4473
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6421	AUPR:0.3975	Fmax:0.4602	Epoch:45
+AUC:0.6129	AUPR:0.3723	Fmax:0.4854	Epoch:0
+AUC:0.6358	AUPR:0.3567	Fmax:0.5	Epoch:15
+AUC:0.4979	AUPR:0.2376	Fmax:0.3937	Epoch:155
+AUC:0.5359	AUPR:0.2414	Fmax:0.3894	Epoch:45
+AVG# AUC:0.5849	AUPR:0.3211	Fmax:0.4457
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6363	AUPR:0.3384	Fmax:0.4815	Epoch:40
+AUC:0.5196	AUPR:0.2989	Fmax:0.4426	Epoch:30
+AUC:0.6238	AUPR:0.3629	Fmax:0.5	Epoch:20
+AUC:0.5026	AUPR:0.2544	Fmax:0.3731	Epoch:105
+AUC:0.5484	AUPR:0.2722	Fmax:0.3765	Epoch:50
+AVG# AUC:0.5661	AUPR:0.3054	Fmax:0.4347
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6265	AUPR:0.3378	Fmax:0.4615	Epoch:60
+AUC:0.5929	AUPR:0.3245	Fmax:0.5	Epoch:10
+AUC:0.5717	AUPR:0.3292	Fmax:0.486	Epoch:20
+AUC:0.5967	AUPR:0.327	Fmax:0.4211	Epoch:0
+AUC:0.5906	AUPR:0.2746	Fmax:0.4112	Epoch:0
+AVG# AUC:0.5957	AUPR:0.3186	Fmax:0.456
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6127	AUPR:0.3124	Fmax:0.48	Epoch:25
+AUC:0.5279	AUPR:0.3153	Fmax:0.449	Epoch:45
+AUC:0.5908	AUPR:0.3467	Fmax:0.486	Epoch:20
+AUC:0.5694	AUPR:0.3537	Fmax:0.3906	Epoch:0
+AUC:0.5276	AUPR:0.2644	Fmax:0.375	Epoch:25
+AVG# AUC:0.5657	AUPR:0.3185	Fmax:0.4361
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6689	AUPR:0.4246	Fmax:0.4865	Epoch:5
+AUC:0.5779	AUPR:0.3226	Fmax:0.466	Epoch:20
+AUC:0.5667	AUPR:0.303	Fmax:0.4912	Epoch:35
+AUC:0.5261	AUPR:0.265	Fmax:0.3934	Epoch:160
+AUC:0.5775	AUPR:0.3336	Fmax:0.3894	Epoch:45
+AVG# AUC:0.5834	AUPR:0.3298	Fmax:0.4453
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6292	AUPR:0.3921	Fmax:0.4425	Epoch:30
+AUC:0.5854	AUPR:0.331	Fmax:0.4646	Epoch:0
+AUC:0.6212	AUPR:0.3684	Fmax:0.4935	Epoch:0
+AUC:0.5407	AUPR:0.2662	Fmax:0.4074	Epoch:15
+AUC:0.5189	AUPR:0.219	Fmax:0.4037	Epoch:0
+AVG# AUC:0.5791	AUPR:0.3153	Fmax:0.4423
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 64
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6591	AUPR:0.4393	Fmax:0.4727	Epoch:30
+AUC:0.5221	AUPR:0.295	Fmax:0.4673	Epoch:30
+AUC:0.6208	AUPR:0.3889	Fmax:0.4878	Epoch:45
+AUC:0.5586	AUPR:0.2809	Fmax:0.4045	Epoch:0
+AUC:0.5315	AUPR:0.2373	Fmax:0.4	Epoch:0
+AVG# AUC:0.5784	AUPR:0.3283	Fmax:0.4465
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6305	AUPR:0.3677	Fmax:0.4571	Epoch:5
+AUC:0.5375	AUPR:0.2863	Fmax:0.4496	Epoch:10
+AUC:0.6779	AUPR:0.5305	Fmax:0.4944	Epoch:10
+AUC:0.5638	AUPR:0.2968	Fmax:0.4118	Epoch:0
+AUC:0.5732	AUPR:0.3303	Fmax:0.3898	Epoch:0
+AVG# AUC:0.5966	AUPR:0.3623	Fmax:0.4405
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6167	AUPR:0.3757	Fmax:0.4727	Epoch:5
+AUC:0.6425	AUPR:0.4251	Fmax:0.5	Epoch:0
+AUC:0.5783	AUPR:0.3358	Fmax:0.4821	Epoch:25
+AUC:0.5134	AUPR:0.2914	Fmax:0.3789	Epoch:75
+AUC:0.5359	AUPR:0.242	Fmax:0.381	Epoch:5
+AVG# AUC:0.5774	AUPR:0.334	Fmax:0.4429
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6466	AUPR:0.393	Fmax:0.4545	Epoch:5
+AUC:0.5662	AUPR:0.3182	Fmax:0.4505	Epoch:0
+AUC:0.5654	AUPR:0.3286	Fmax:0.4865	Epoch:0
+AUC:0.4654	AUPR:0.281	Fmax:0.3731	Epoch:25
+AUC:0.4884	AUPR:0.2717	Fmax:0.3721	Epoch:15
+AVG# AUC:0.5464	AUPR:0.3185	Fmax:0.4273
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6537	AUPR:0.4065	Fmax:0.481	Epoch:5
+AUC:0.575	AUPR:0.3422	Fmax:0.463	Epoch:0
+AUC:0.5754	AUPR:0.308	Fmax:0.4793	Epoch:5
+AUC:0.4555	AUPR:0.2191	Fmax:0.381	Epoch:50
+AUC:0.4913	AUPR:0.2107	Fmax:0.3704	Epoch:0
+AVG# AUC:0.5502	AUPR:0.2973	Fmax:0.4349
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6243	AUPR:0.384	Fmax:0.4598	Epoch:5
+AUC:0.6342	AUPR:0.3477	Fmax:0.5	Epoch:0
+AUC:0.6196	AUPR:0.33	Fmax:0.5	Epoch:5
+AUC:0.4631	AUPR:0.2244	Fmax:0.3846	Epoch:60
+AUC:0.5872	AUPR:0.2587	Fmax:0.411	Epoch:5
+AVG# AUC:0.5857	AUPR:0.309	Fmax:0.4511
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.5868	AUPR:0.3508	Fmax:0.4198	Epoch:0
+AUC:0.5579	AUPR:0.3119	Fmax:0.4602	Epoch:10
+AUC:0.7296	AUPR:0.504	Fmax:0.5862	Epoch:0
+AUC:0.4621	AUPR:0.261	Fmax:0.3906	Epoch:60
+AUC:0.5087	AUPR:0.2161	Fmax:0.4071	Epoch:20
+AVG# AUC:0.569	AUPR:0.3288	Fmax:0.4528
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6011	AUPR:0.3571	Fmax:0.4444	Epoch:5
+AUC:0.56	AUPR:0.3334	Fmax:0.45	Epoch:245
+AUC:0.5608	AUPR:0.3567	Fmax:0.448	Epoch:0
+AUC:0.5016	AUPR:0.2515	Fmax:0.3817	Epoch:25
+AUC:0.5034	AUPR:0.2228	Fmax:0.381	Epoch:15
+AVG# AUC:0.5454	AUPR:0.3043	Fmax:0.421
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6528	AUPR:0.4532	Fmax:0.4722	Epoch:5
+AUC:0.5017	AUPR:0.2845	Fmax:0.4348	Epoch:0
+AUC:0.5758	AUPR:0.3084	Fmax:0.4842	Epoch:5
+AUC:0.5224	AUPR:0.2692	Fmax:0.3906	Epoch:0
+AUC:0.5179	AUPR:0.2504	Fmax:0.3866	Epoch:5
+AVG# AUC:0.5541	AUPR:0.3131	Fmax:0.4337
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6983	AUPR:0.4201	Fmax:0.4906	Epoch:5
+AUC:0.505	AUPR:0.2702	Fmax:0.4463	Epoch:35
+AUC:0.5608	AUPR:0.3123	Fmax:0.4615	Epoch:0
+AUC:0.5256	AUPR:0.2561	Fmax:0.3883	Epoch:0
+AUC:0.515	AUPR:0.2242	Fmax:0.4	Epoch:15
+AVG# AUC:0.5609	AUPR:0.2966	Fmax:0.4373
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.656	AUPR:0.3241	Fmax:0.5	Epoch:5
+AUC:0.6025	AUPR:0.3511	Fmax:0.4821	Epoch:0
+AUC:0.6562	AUPR:0.4069	Fmax:0.4915	Epoch:20
+AUC:0.5445	AUPR:0.2717	Fmax:0.3898	Epoch:0
+AUC:0.5799	AUPR:0.3264	Fmax:0.4	Epoch:0
+AVG# AUC:0.6078	AUPR:0.336	Fmax:0.4527
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.651	AUPR:0.3605	Fmax:0.4634	Epoch:5
+AUC:0.5621	AUPR:0.4176	Fmax:0.4328	Epoch:0
+AUC:0.6838	AUPR:0.4489	Fmax:0.5283	Epoch:20
+AUC:0.6311	AUPR:0.3614	Fmax:0.4528	Epoch:0
+AUC:0.5518	AUPR:0.2559	Fmax:0.3818	Epoch:0
+AVG# AUC:0.616	AUPR:0.3689	Fmax:0.4518
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6689	AUPR:0.3689	Fmax:0.4675	Epoch:5
+AUC:0.5104	AUPR:0.2989	Fmax:0.4478	Epoch:20
+AUC:0.5854	AUPR:0.329	Fmax:0.4571	Epoch:25
+AUC:0.5026	AUPR:0.233	Fmax:0.3906	Epoch:100
+AUC:0.5484	AUPR:0.2433	Fmax:0.4034	Epoch:0
+AVG# AUC:0.5631	AUPR:0.2946	Fmax:0.4333
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6145	AUPR:0.3768	Fmax:0.4286	Epoch:5
+AUC:0.6046	AUPR:0.3802	Fmax:0.4954	Epoch:5
+AUC:0.6725	AUPR:0.4648	Fmax:0.5217	Epoch:0
+AUC:0.4598	AUPR:0.2151	Fmax:0.3846	Epoch:5
+AUC:0.4927	AUPR:0.3056	Fmax:0.3636	Epoch:0
+AVG# AUC:0.5688	AUPR:0.3485	Fmax:0.4388
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6104	AUPR:0.4067	Fmax:0.4348	Epoch:5
+AUC:0.6133	AUPR:0.3859	Fmax:0.4715	Epoch:0
+AUC:0.6567	AUPR:0.3653	Fmax:0.5479	Epoch:5
+AUC:0.4856	AUPR:0.2285	Fmax:0.3876	Epoch:50
+AUC:0.5063	AUPR:0.2282	Fmax:0.3918	Epoch:30
+AVG# AUC:0.5745	AUPR:0.3229	Fmax:0.4467
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6167	AUPR:0.3025	Fmax:0.475	Epoch:15
+AUC:0.5729	AUPR:0.3925	Fmax:0.4419	Epoch:5
+AUC:0.6038	AUPR:0.336	Fmax:0.4946	Epoch:5
+AUC:0.5374	AUPR:0.2541	Fmax:0.3966	Epoch:265
+AUC:0.5896	AUPR:0.3963	Fmax:0.4	Epoch:0
+AVG# AUC:0.5841	AUPR:0.3363	Fmax:0.4416
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6528	AUPR:0.4201	Fmax:0.4815	Epoch:5
+AUC:0.5625	AUPR:0.2991	Fmax:0.4545	Epoch:10
+AUC:0.5671	AUPR:0.3345	Fmax:0.4687	Epoch:15
+AUC:0.5614	AUPR:0.255	Fmax:0.4158	Epoch:0
+AUC:0.5286	AUPR:0.2373	Fmax:0.381	Epoch:10
+AVG# AUC:0.5745	AUPR:0.3092	Fmax:0.4403
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6635	AUPR:0.4191	Fmax:0.4941	Epoch:5
+AUC:0.5658	AUPR:0.301	Fmax:0.4646	Epoch:5
+AUC:0.5187	AUPR:0.2848	Fmax:0.4528	Epoch:5
+AUC:0.5176	AUPR:0.2469	Fmax:0.4	Epoch:15
+AUC:0.4695	AUPR:0.2031	Fmax:0.378	Epoch:30
+AVG# AUC:0.547	AUPR:0.291	Fmax:0.4379
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6408	AUPR:0.4186	Fmax:0.4571	Epoch:5
+AUC:0.5646	AUPR:0.302	Fmax:0.4737	Epoch:5
+AUC:0.5975	AUPR:0.3375	Fmax:0.4954	Epoch:0
+AUC:0.5059	AUPR:0.23	Fmax:0.4	Epoch:5
+AUC:0.5819	AUPR:0.313	Fmax:0.4211	Epoch:10
+AVG# AUC:0.5781	AUPR:0.3202	Fmax:0.4495
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6725	AUPR:0.3891	Fmax:0.4944	Epoch:45
+AUC:0.5558	AUPR:0.4028	Fmax:0.438	Epoch:25
+AUC:0.6187	AUPR:0.3531	Fmax:0.4902	Epoch:20
+AUC:0.5181	AUPR:0.2635	Fmax:0.3731	Epoch:15
+AUC:0.5906	AUPR:0.2712	Fmax:0.4186	Epoch:5
+AVG# AUC:0.5911	AUPR:0.3359	Fmax:0.4429
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6524	AUPR:0.3811	Fmax:0.4706	Epoch:50
+AUC:0.5517	AUPR:0.3223	Fmax:0.46	Epoch:45
+AUC:0.6812	AUPR:0.4817	Fmax:0.5217	Epoch:20
+AUC:0.4951	AUPR:0.25	Fmax:0.3736	Epoch:40
+AUC:0.5392	AUPR:0.2946	Fmax:0.3818	Epoch:170
+AVG# AUC:0.5839	AUPR:0.3459	Fmax:0.4415
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.647	AUPR:0.406	Fmax:0.4587	Epoch:55
+AUC:0.5542	AUPR:0.3626	Fmax:0.4375	Epoch:25
+AUC:0.6008	AUPR:0.3226	Fmax:0.5	Epoch:200
+AUC:0.52	AUPR:0.3129	Fmax:0.375	Epoch:20
+AUC:0.5538	AUPR:0.2372	Fmax:0.3939	Epoch:15
+AVG# AUC:0.5752	AUPR:0.3283	Fmax:0.433
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6087	AUPR:0.3128	Fmax:0.4516	Epoch:55
+AUC:0.6238	AUPR:0.4264	Fmax:0.5316	Epoch:15
+AUC:0.5975	AUPR:0.3363	Fmax:0.5143	Epoch:75
+AUC:0.5078	AUPR:0.2509	Fmax:0.3788	Epoch:25
+AUC:0.5979	AUPR:0.328	Fmax:0.4037	Epoch:0
+AVG# AUC:0.5871	AUPR:0.3309	Fmax:0.456
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6359	AUPR:0.3363	Fmax:0.4615	Epoch:60
+AUC:0.6333	AUPR:0.4608	Fmax:0.4889	Epoch:10
+AUC:0.5862	AUPR:0.3145	Fmax:0.4915	Epoch:20
+AUC:0.5925	AUPR:0.3469	Fmax:0.4314	Epoch:0
+AUC:0.5276	AUPR:0.289	Fmax:0.3871	Epoch:55
+AVG# AUC:0.5951	AUPR:0.3495	Fmax:0.4521
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.5877	AUPR:0.303	Fmax:0.4364	Epoch:55
+AUC:0.5975	AUPR:0.3817	Fmax:0.4651	Epoch:15
+AUC:0.6004	AUPR:0.3539	Fmax:0.4854	Epoch:65
+AUC:0.5708	AUPR:0.2703	Fmax:0.4045	Epoch:5
+AUC:0.5848	AUPR:0.3029	Fmax:0.4	Epoch:0
+AVG# AUC:0.5882	AUPR:0.3224	Fmax:0.4383
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6323	AUPR:0.3964	Fmax:0.4872	Epoch:40
+AUC:0.5529	AUPR:0.3636	Fmax:0.4483	Epoch:80
+AUC:0.6121	AUPR:0.3727	Fmax:0.4737	Epoch:15
+AUC:0.4908	AUPR:0.2391	Fmax:0.3876	Epoch:175
+AUC:0.5858	AUPR:0.3507	Fmax:0.375	Epoch:0
+AVG# AUC:0.5748	AUPR:0.3445	Fmax:0.4344
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6653	AUPR:0.4251	Fmax:0.4615	Epoch:35
+AUC:0.57	AUPR:0.3435	Fmax:0.4615	Epoch:30
+AUC:0.6525	AUPR:0.4098	Fmax:0.5349	Epoch:45
+AUC:0.5779	AUPR:0.3337	Fmax:0.4	Epoch:0
+AUC:0.5141	AUPR:0.2784	Fmax:0.3789	Epoch:80
+AVG# AUC:0.596	AUPR:0.3581	Fmax:0.4474
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 128
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6488	AUPR:0.3704	Fmax:0.4938	Epoch:35
+AUC:0.5292	AUPR:0.3051	Fmax:0.4425	Epoch:30
+AUC:0.6008	AUPR:0.3698	Fmax:0.495	Epoch:65
+AUC:0.5111	AUPR:0.244	Fmax:0.4158	Epoch:5
+AUC:0.5024	AUPR:0.2174	Fmax:0.378	Epoch:5
+AVG# AUC:0.5585	AUPR:0.3013	Fmax:0.445
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6867	AUPR:0.4136	Fmax:0.4865	Epoch:5
+AUC:0.5679	AUPR:0.393	Fmax:0.4516	Epoch:0
+AUC:0.6412	AUPR:0.4238	Fmax:0.5053	Epoch:20
+AUC:0.528	AUPR:0.2354	Fmax:0.4	Epoch:0
+AUC:0.5363	AUPR:0.2373	Fmax:0.3956	Epoch:40
+AVG# AUC:0.592	AUPR:0.3406	Fmax:0.4478
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6975	AUPR:0.4213	Fmax:0.4906	Epoch:5
+AUC:0.5729	AUPR:0.3151	Fmax:0.4878	Epoch:0
+AUC:0.6154	AUPR:0.3507	Fmax:0.4902	Epoch:0
+AUC:0.5299	AUPR:0.2899	Fmax:0.3966	Epoch:0
+AUC:0.5131	AUPR:0.2137	Fmax:0.4301	Epoch:35
+AVG# AUC:0.5858	AUPR:0.3181	Fmax:0.4591
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6452	AUPR:0.3685	Fmax:0.4706	Epoch:5
+AUC:0.4892	AUPR:0.3101	Fmax:0.4545	Epoch:175
+AUC:0.5987	AUPR:0.3261	Fmax:0.4912	Epoch:25
+AUC:0.4922	AUPR:0.2238	Fmax:0.4	Epoch:35
+AUC:0.5698	AUPR:0.2645	Fmax:0.4356	Epoch:40
+AVG# AUC:0.559	AUPR:0.2986	Fmax:0.4504
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6461	AUPR:0.4143	Fmax:0.4694	Epoch:5
+AUC:0.5804	AUPR:0.3167	Fmax:0.4779	Epoch:5
+AUC:0.6333	AUPR:0.3877	Fmax:0.495	Epoch:5
+AUC:0.5049	AUPR:0.2252	Fmax:0.3929	Epoch:0
+AUC:0.5024	AUPR:0.2202	Fmax:0.3871	Epoch:65
+AVG# AUC:0.5734	AUPR:0.3128	Fmax:0.4445
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6711	AUPR:0.4003	Fmax:0.4865	Epoch:5
+AUC:0.5967	AUPR:0.3354	Fmax:0.4906	Epoch:5
+AUC:0.6788	AUPR:0.4506	Fmax:0.5263	Epoch:5
+AUC:0.5134	AUPR:0.2308	Fmax:0.4068	Epoch:0
+AUC:0.5296	AUPR:0.256	Fmax:0.3824	Epoch:0
+AVG# AUC:0.5979	AUPR:0.3346	Fmax:0.4585
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6702	AUPR:0.3553	Fmax:0.4865	Epoch:10
+AUC:0.5817	AUPR:0.3444	Fmax:0.459	Epoch:5
+AUC:0.5904	AUPR:0.3413	Fmax:0.486	Epoch:10
+AUC:0.5002	AUPR:0.2445	Fmax:0.4034	Epoch:0
+AUC:0.5034	AUPR:0.2272	Fmax:0.368	Epoch:20
+AVG# AUC:0.5692	AUPR:0.3025	Fmax:0.4406
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6444	AUPR:0.4113	Fmax:0.48	Epoch:5
+AUC:0.5142	AUPR:0.2777	Fmax:0.4646	Epoch:5
+AUC:0.5458	AUPR:0.3346	Fmax:0.4522	Epoch:5
+AUC:0.4593	AUPR:0.2058	Fmax:0.3731	Epoch:5
+AUC:0.6313	AUPR:0.3517	Fmax:0.4324	Epoch:0
+AVG# AUC:0.559	AUPR:0.3162	Fmax:0.4405
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6618	AUPR:0.4339	Fmax:0.4889	Epoch:5
+AUC:0.5258	AUPR:0.2878	Fmax:0.4632	Epoch:20
+AUC:0.5992	AUPR:0.3318	Fmax:0.4706	Epoch:0
+AUC:0.5007	AUPR:0.294	Fmax:0.3759	Epoch:30
+AUC:0.5426	AUPR:0.2654	Fmax:0.3721	Epoch:0
+AVG# AUC:0.566	AUPR:0.3226	Fmax:0.4341
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.01
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6618	AUPR:0.4176	Fmax:0.4783	Epoch:20
+AUC:0.5842	AUPR:0.3417	Fmax:0.4496	Epoch:15
+AUC:0.5775	AUPR:0.3422	Fmax:0.4839	Epoch:5
+AUC:0.5619	AUPR:0.2996	Fmax:0.4337	Epoch:5
+AUC:0.515	AUPR:0.2271	Fmax:0.3902	Epoch:15
+AVG# AUC:0.5801	AUPR:0.3256	Fmax:0.4471
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.618	AUPR:0.4243	Fmax:0.4587	Epoch:5
+AUC:0.5063	AUPR:0.3199	Fmax:0.4286	Epoch:0
+AUC:0.65	AUPR:0.4762	Fmax:0.4954	Epoch:20
+AUC:0.4984	AUPR:0.2405	Fmax:0.3934	Epoch:145
+AUC:0.5552	AUPR:0.2729	Fmax:0.4	Epoch:90
+AVG# AUC:0.5656	AUPR:0.3468	Fmax:0.4352
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6243	AUPR:0.3589	Fmax:0.4658	Epoch:50
+AUC:0.5862	AUPR:0.4581	Fmax:0.4421	Epoch:15
+AUC:0.6512	AUPR:0.4102	Fmax:0.5055	Epoch:20
+AUC:0.5214	AUPR:0.296	Fmax:0.3925	Epoch:295
+AUC:0.5053	AUPR:0.2156	Fmax:0.384	Epoch:90
+AVG# AUC:0.5777	AUPR:0.3478	Fmax:0.438
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6301	AUPR:0.3995	Fmax:0.4561	Epoch:25
+AUC:0.5325	AUPR:0.3029	Fmax:0.4516	Epoch:0
+AUC:0.6346	AUPR:0.3751	Fmax:0.4884	Epoch:0
+AUC:0.5087	AUPR:0.2428	Fmax:0.3956	Epoch:0
+AUC:0.5703	AUPR:0.2588	Fmax:0.4	Epoch:5
+AVG# AUC:0.5752	AUPR:0.3158	Fmax:0.4383
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6002	AUPR:0.3339	Fmax:0.4706	Epoch:5
+AUC:0.6383	AUPR:0.3823	Fmax:0.5	Epoch:5
+AUC:0.6871	AUPR:0.4627	Fmax:0.5306	Epoch:5
+AUC:0.5002	AUPR:0.2471	Fmax:0.3704	Epoch:5
+AUC:0.5237	AUPR:0.217	Fmax:0.4043	Epoch:70
+AVG# AUC:0.5899	AUPR:0.3286	Fmax:0.4552
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6122	AUPR:0.3976	Fmax:0.4416	Epoch:5
+AUC:0.5988	AUPR:0.3798	Fmax:0.4615	Epoch:10
+AUC:0.5971	AUPR:0.3254	Fmax:0.4878	Epoch:35
+AUC:0.4974	AUPR:0.2387	Fmax:0.4071	Epoch:0
+AUC:0.5557	AUPR:0.2516	Fmax:0.4103	Epoch:55
+AVG# AUC:0.5722	AUPR:0.3186	Fmax:0.4417
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6037	AUPR:0.3199	Fmax:0.4524	Epoch:35
+AUC:0.4896	AUPR:0.2807	Fmax:0.4677	Epoch:85
+AUC:0.6113	AUPR:0.364	Fmax:0.4706	Epoch:15
+AUC:0.5539	AUPR:0.2796	Fmax:0.4	Epoch:0
+AUC:0.485	AUPR:0.2119	Fmax:0.3721	Epoch:70
+AVG# AUC:0.5487	AUPR:0.2912	Fmax:0.4326
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6676	AUPR:0.4362	Fmax:0.5357	Epoch:5
+AUC:0.5329	AUPR:0.3117	Fmax:0.4386	Epoch:25
+AUC:0.5479	AUPR:0.2914	Fmax:0.4762	Epoch:40
+AUC:0.5336	AUPR:0.2792	Fmax:0.3908	Epoch:45
+AUC:0.5024	AUPR:0.2315	Fmax:0.3925	Epoch:0
+AVG# AUC:0.5569	AUPR:0.31	Fmax:0.4468
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6336	AUPR:0.3854	Fmax:0.5143	Epoch:5
+AUC:0.5125	AUPR:0.2842	Fmax:0.4412	Epoch:25
+AUC:0.5554	AUPR:0.2852	Fmax:0.5047	Epoch:35
+AUC:0.5087	AUPR:0.2481	Fmax:0.3817	Epoch:0
+AUC:0.5291	AUPR:0.2608	Fmax:0.3611	Epoch:0
+AVG# AUC:0.5479	AUPR:0.2927	Fmax:0.4406
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.005
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6751	AUPR:0.4158	Fmax:0.5	Epoch:5
+AUC:0.5804	AUPR:0.3512	Fmax:0.4762	Epoch:5
+AUC:0.5667	AUPR:0.3305	Fmax:0.5	Epoch:25
+AUC:0.5539	AUPR:0.2799	Fmax:0.4478	Epoch:10
+AUC:0.5257	AUPR:0.2446	Fmax:0.3704	Epoch:10
+AVG# AUC:0.5804	AUPR:0.3244	Fmax:0.4589
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6653	AUPR:0.3455	Fmax:0.5	Epoch:130
+AUC:0.5608	AUPR:0.3417	Fmax:0.449	Epoch:0
+AUC:0.5954	AUPR:0.397	Fmax:0.4706	Epoch:20
+AUC:0.5068	AUPR:0.263	Fmax:0.3833	Epoch:0
+AUC:0.5005	AUPR:0.2596	Fmax:0.3664	Epoch:135
+AVG# AUC:0.5658	AUPR:0.3214	Fmax:0.4339
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6689	AUPR:0.3996	Fmax:0.4952	Epoch:100
+AUC:0.6317	AUPR:0.3752	Fmax:0.4842	Epoch:10
+AUC:0.5854	AUPR:0.3366	Fmax:0.5053	Epoch:155
+AUC:0.5167	AUPR:0.2816	Fmax:0.3731	Epoch:25
+AUC:0.5446	AUPR:0.2784	Fmax:0.3652	Epoch:0
+AVG# AUC:0.5895	AUPR:0.3343	Fmax:0.4446
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 16
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6631	AUPR:0.3551	Fmax:0.4952	Epoch:105
+AUC:0.5525	AUPR:0.344	Fmax:0.4478	Epoch:50
+AUC:0.6183	AUPR:0.3712	Fmax:0.52	Epoch:220
+AUC:0.5553	AUPR:0.3047	Fmax:0.3939	Epoch:25
+AUC:0.5572	AUPR:0.3211	Fmax:0.3929	Epoch:5
+AVG# AUC:0.5893	AUPR:0.3392	Fmax:0.45
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.631	AUPR:0.3478	Fmax:0.475	Epoch:80
+AUC:0.5662	AUPR:0.3564	Fmax:0.4444	Epoch:20
+AUC:0.6225	AUPR:0.368	Fmax:0.5	Epoch:95
+AUC:0.6165	AUPR:0.3339	Fmax:0.4494	Epoch:0
+AUC:0.6027	AUPR:0.3151	Fmax:0.4091	Epoch:0
+AVG# AUC:0.6078	AUPR:0.3442	Fmax:0.4556
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6412	AUPR:0.3458	Fmax:0.475	Epoch:140
+AUC:0.5583	AUPR:0.3159	Fmax:0.4673	Epoch:65
+AUC:0.5867	AUPR:0.3648	Fmax:0.4819	Epoch:70
+AUC:0.4574	AUPR:0.2121	Fmax:0.3774	Epoch:0
+AUC:0.5044	AUPR:0.2089	Fmax:0.3966	Epoch:25
+AVG# AUC:0.5496	AUPR:0.2895	Fmax:0.4396
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 32
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6359	AUPR:0.3256	Fmax:0.5063	Epoch:85
+AUC:0.6171	AUPR:0.3233	Fmax:0.52	Epoch:0
+AUC:0.6017	AUPR:0.3606	Fmax:0.5155	Epoch:40
+AUC:0.5934	AUPR:0.2942	Fmax:0.4118	Epoch:15
+AUC:0.578	AUPR:0.3068	Fmax:0.396	Epoch:10
+AVG# AUC:0.6052	AUPR:0.3221	Fmax:0.4699
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 0.5
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6546	AUPR:0.3675	Fmax:0.4948	Epoch:120
+AUC:0.5529	AUPR:0.3425	Fmax:0.4516	Epoch:50
+AUC:0.6133	AUPR:0.4025	Fmax:0.4848	Epoch:80
+AUC:0.5031	AUPR:0.2324	Fmax:0.381	Epoch:20
+AUC:0.5305	AUPR:0.2627	Fmax:0.3789	Epoch:140
+AVG# AUC:0.5709	AUPR:0.3215	Fmax:0.4382
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 1.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6488	AUPR:0.3523	Fmax:0.4889	Epoch:170
+AUC:0.5508	AUPR:0.3315	Fmax:0.4394	Epoch:15
+AUC:0.6021	AUPR:0.3855	Fmax:0.4894	Epoch:65
+AUC:0.5322	AUPR:0.2816	Fmax:0.3793	Epoch:20
+AUC:0.5528	AUPR:0.279	Fmax:0.3947	Epoch:5
+AVG# AUC:0.5773	AUPR:0.326	Fmax:0.4383
+Configurations:
+	root: ../data/
+	graph: 1
+	bs: 256
+	lr: 0.001
+	prior: 0.01
+	emb_dim: 64
+	lmbda: 2.0
+	base_model: DistMult
+	num_ng: 4
+	wd: 0
+	do: 0.2
+	loss_type: pn
+	scoring_fct_norm: 1
+	kernel_size: 3
+	convkb_drop_prob: 0.5
+	out_channels: 32
+	margin: 6.0
+	epsilon: 2.0
+	num_workers: 0
+	max_epochs: 5000
+	seed: 42
+	gpu: 1
+	valid_interval: 5
+	verbose: 0
+	tolerance: 20
+N Entities:1638
+N Relations:12
+AUC:0.6238	AUPR:0.3454	Fmax:0.4557	Epoch:85
+AUC:0.6125	AUPR:0.3928	Fmax:0.464	Epoch:30
+AUC:0.6237	AUPR:0.3413	Fmax:0.5243	Epoch:60
+AUC:0.5115	AUPR:0.2616	Fmax:0.3824	Epoch:35
+AUC:0.6478	AUPR:0.3202	Fmax:0.4407	Epoch:0
+AVG# AUC:0.6039	AUPR:0.3323	Fmax:0.4534
