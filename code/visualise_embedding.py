@@ -6,6 +6,7 @@ import pickle
 from rdflib import Graph
 from rdflib.plugins.sparql.processor import SPARQLResult
 import pandas as pd
+from sklearn.manifold import TSNE
 
 
 def load_embedding():
@@ -44,7 +45,7 @@ def get_treatment_response(g):
     return sparql_results_to_df(qres)
 
 
-def df_embeding_treatment(treatment_response, dict_emb_e):
+def df_embedding_treatment(treatment_response, dict_emb_e):
     treatment_response.treatment = '<' + treatment_response.treatment + '>'
     emb_treatment = dict((k, dict_emb_e[k]) for k in list(treatment_response.treatment))
     df = pd.DataFrame(emb_treatment.values())
@@ -66,9 +67,13 @@ def plot_treatment(new_df, n):
     #####PLOT#####
     # fig, ax = plt.subplots(1, figsize=(8, 8))
     # plot data
-    pca = PCA(n_components=2).fit(X)
-    pca_c = pca.transform(X)
-    plt.scatter(pca_c[:, 0], pca_c[:, 1], c=new_df.c, s=50)  # alpha=0.6,
+    # pca = PCA(n_components=2).fit(X)
+    # dim_reduction = pca.transform(X)
+
+    tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=2500, random_state=42)
+    dim_reduction = tsne.fit_transform(X)
+
+    plt.scatter(dim_reduction[:, 0], dim_reduction[:, 1], c=new_df.c, s=50)  # alpha=0.6,
 
     # create a list of legend elemntes
     ## markers / records
@@ -95,7 +100,7 @@ if __name__ == '__main__':
     g = load_rdf_graph('data/T_KG/', 'G1.ttl')
     treatment_response = get_treatment_response(g)
 
-    emb_treatment = df_embeding_treatment(treatment_response, dict_emb_e)
+    emb_treatment = df_embedding_treatment(treatment_response, dict_emb_e)
     # print(emb_treatment)
     plot_treatment(emb_treatment, 1)
 

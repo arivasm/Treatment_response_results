@@ -32,12 +32,12 @@ def seed_everything(seed):
 
 class KnowledgeGraphDataset(torch.utils.data.Dataset):
     def __init__(self,
-                e_dict,
-                r_dict,
-                train_data,
-                already_ts_dict,
-                already_hs_dict,
-                num_ng):
+                 e_dict,
+                 r_dict,
+                 train_data,
+                 already_ts_dict,
+                 already_hs_dict,
+                 num_ng):
         super().__init__()
         self.e_dict = e_dict
         self.r_dict = r_dict
@@ -106,7 +106,8 @@ class DrugTreatmentPU(torch.nn.Module):
             self.conv2_bn = torch.nn.BatchNorm2d(self.out_channels)
             self.dropout = torch.nn.Dropout(cfg.convkb_drop_prob)
             self.non_linearity = torch.nn.ReLU()  # you should also tune with torch.tanh() or torch.nn.Tanh()
-            self.fc_layer = torch.nn.Linear((self.hidden_size - self.kernel_size + 1) * self.out_channels, 1, bias=False)
+            self.fc_layer = torch.nn.Linear((self.hidden_size - self.kernel_size + 1) * self.out_channels, 1,
+                                            bias=False)
         elif cfg.base_model == 'TransH':
             #  === TransH ===
             self.norm_vector = torch.nn.Embedding(len(r_dict), cfg.emb_dim)
@@ -115,14 +116,14 @@ class DrugTreatmentPU(torch.nn.Module):
             # self.margin = cfg.margin
             self.margin = torch.nn.Parameter(torch.Tensor([cfg.margin]), requires_grad=False)
             self.epsilon = cfg.epsilon
-            self.e_embedding = torch.nn.Embedding(len(e_dict), self.emb_dim*2)
+            self.e_embedding = torch.nn.Embedding(len(e_dict), self.emb_dim * 2)
             self.r_embedding = torch.nn.Embedding(len(r_dict), self.emb_dim)
             self.rel_embedding_range = torch.nn.Parameter(
                 torch.Tensor([(self.margin.item() + self.epsilon) / self.emb_dim]),
                 requires_grad=False
             )
             self.pi_const = torch.nn.Parameter(torch.Tensor([3.14159265358979323846]))
-            self.fc_1 = torch.nn.Linear(self.emb_dim*2, 1)
+            self.fc_1 = torch.nn.Linear(self.emb_dim * 2, 1)
 
         torch.nn.init.xavier_uniform_(self.fc_1.weight.data)
         # torch.nn.init.xavier_uniform_(self.fc_2.weight.data)
@@ -274,7 +275,7 @@ def read_data(cfg, fold):
         train_data_kg = pd.read_csv(cfg.root + '/train_data_kg_G1.csv', index_col=0)
     else:
         raise ValueError
-        
+
     train_data_tr = pd.read_csv(cfg.root + '/train_data_tr_' + str(fold) + '.csv', index_col=0)
     test_data = pd.read_csv(cfg.root + '/test_data_' + str(fold) + '.csv', index_col=0)
 
@@ -319,10 +320,10 @@ def parse_args(args=None):
     parser.add_argument('--wd', default=0, type=float)
     parser.add_argument('--do', default=0.2, type=float)
     parser.add_argument('--loss_type', default='pn', type=str)
-    parser.add_argument('--scoring_fct_norm', default=1, type=float)   
-    parser.add_argument('--kernel_size', default=3, type=int)          
-    parser.add_argument('--convkb_drop_prob', default=0.5, type=float)  
-    parser.add_argument('--out_channels', default=32, type=int)        
+    parser.add_argument('--scoring_fct_norm', default=1, type=float)
+    parser.add_argument('--kernel_size', default=3, type=int)
+    parser.add_argument('--convkb_drop_prob', default=0.5, type=float)
+    parser.add_argument('--out_channels', default=32, type=int)
     parser.add_argument('--margin', default=6.0, type=float)
     parser.add_argument('--epsilon', default=2.0, type=float)
 
@@ -342,9 +343,21 @@ def save_model_log(graph_ttl, name):
         file.write(graph_ttl)
 
 
-def save_embedding(dict_emb_e):
-    with open('embedding_e.pkl', 'wb') as f:
-        pickle.dump(dict_emb_e, f)
+def save_embedding(list_dict_emb, loss_type):
+    i = 0
+    for dict_emb_e in list_dict_emb:
+        with open('embedding_e_' + loss_type + '_' + str(i) + '.pkl', 'wb') as f:
+            pickle.dump(dict_emb_e, f)
+        i += 1
+
+
+def save_best_auc(val, name):
+    with open(name, 'w') as file:
+        file.write(val)
+
+
+def load_best_auc(name):
+    return float(open(name).read().strip())
 
 
 if __name__ == '__main__':
@@ -360,32 +373,35 @@ if __name__ == '__main__':
     aucss = []
     auprss = []
     fmaxss = []
+    list_dict_emb = []
+    best_avg_auc = load_best_auc('best_avg_auc.txt')
+    print(best_avg_auc, type(best_avg_auc))
     for fold in range(5):
         e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict = read_data(cfg,
-                                                                                                            fold=fold)
+                                                                                                              fold=fold)
         if fold == 0:
             print(f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}')
             model_log = model_log + f'N Entities:{len(e_dict)}\nN Relations:{len(r_dict)}' + '\n'
         train_dataset_kg = KnowledgeGraphDataset(e_dict, r_dict, train_data_kg, already_ts_dict, already_hs_dict,
-                                                cfg.num_ng)
+                                                 cfg.num_ng)
         train_dataset_tr = TreatmentDataset(train_data_tr)
         test_dataset = TreatmentDataset(test_data)
 
         train_dataloader_kg = torch.utils.data.DataLoader(dataset=train_dataset_kg,
-                                                        batch_size=cfg.bs,
-                                                        num_workers=cfg.num_workers,
-                                                        shuffle=True,
-                                                        drop_last=True)
+                                                          batch_size=cfg.bs,
+                                                          num_workers=cfg.num_workers,
+                                                          shuffle=True,
+                                                          drop_last=True)
         train_dataloader_tr = torch.utils.data.DataLoader(dataset=train_dataset_tr,
-                                                        batch_size=cfg.bs // 4,
-                                                        num_workers=cfg.num_workers,
-                                                        shuffle=True,
-                                                        drop_last=True)
+                                                          batch_size=cfg.bs // 4,
+                                                          num_workers=cfg.num_workers,
+                                                          shuffle=True,
+                                                          drop_last=True)
         test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset,
-                                                    batch_size=cfg.bs // 4,
-                                                    num_workers=cfg.num_workers,
-                                                    shuffle=False,
-                                                    drop_last=False)
+                                                      batch_size=cfg.bs // 4,
+                                                      num_workers=cfg.num_workers,
+                                                      shuffle=False,
+                                                      drop_last=False)
 
         model = DrugTreatmentPU(e_dict, r_dict, cfg)
         model = model.to(device)
@@ -452,11 +468,17 @@ if __name__ == '__main__':
             f'AUC:{aucs[max_index]}\tAUPR:{auprs[max_index]}\tFmax:{fmaxs[max_index]}\tEpoch:{max_index * cfg.valid_interval}')
         model_log = model_log + f'AUC:{aucs[max_index]}\tAUPR:{auprs[max_index]}\tFmax:{fmaxs[max_index]}\tEpoch:{max_index * cfg.valid_interval}' + '\n'
 
-        # dict_emb_e = dict(zip(e_dict.keys(), model.e_embedding.weight.data.cpu().detach().numpy()))
+        dict_emb_e = dict(zip(e_dict.keys(), model.e_embedding.weight.data.cpu().detach().numpy()))
         # print(dict_emb_e)
+        list_dict_emb.append(dict_emb_e)
         # save_embedding(dict_emb_e)
         # break
 
-    print(f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}')
+    print(
+        f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}')
     model_log = model_log + f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}' + '\n'
-    # save_model_log(model_log, cfg.base_model+'_'+cfg.loss_type+'.log')
+    save_model_log(model_log, cfg.base_model + '_' + cfg.loss_type + '.log')
+    if cfg.base_model == 'DistMult' and cfg.loss_type == 'pu':
+        if round(sum(aucss) / len(aucss), 4) > best_avg_auc:
+            save_embedding(list_dict_emb, cfg.loss_type)
+            save_best_auc(str(round(sum(aucss) / len(aucss), 4)), 'best_avg_auc.txt')
