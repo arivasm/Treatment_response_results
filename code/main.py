@@ -212,6 +212,12 @@ class DrugTreatmentPU(torch.nn.Module):
         else:
             return e - torch.sum(e * norm, -1, True) * norm
 
+    def aux_1(self, data):
+        h_emb = self.e_embedding(data[:, :, 0])
+        r_emb = self.r_embedding(data[:, :, 1])
+        t_emb = self.e_embedding(data[:, :, 2])
+        return h_emb * r_emb * t_emb
+
     def _forward_kg(self, data):
         h_emb = self.e_embedding(data[:, :, 0])
         r_emb = self.r_embedding(data[:, :, 1])
@@ -374,8 +380,6 @@ if __name__ == '__main__':
     auprss = []
     fmaxss = []
     list_dict_emb = []
-    best_avg_auc = load_best_auc('best_avg_auc.txt')
-    print(best_avg_auc, type(best_avg_auc))
     for fold in range(5):
         e_dict, r_dict, train_data_kg, train_data_tr, test_data, already_ts_dict, already_hs_dict = read_data(cfg,
                                                                                                               fold=fold)
@@ -422,8 +426,6 @@ if __name__ == '__main__':
             for batch in zip(train_dataloader_kg, train_dataloader_tr):
                 batch_kg = batch[0].to(device)
                 batch_tr = batch[1].to(device)
-                # print('batch_kg:', batch_kg)
-                # print('batch_tr:', batch_tr)
                 loss_kg = model.get_loss_kg(batch_kg)
                 loss_tr = model.get_loss_tr(batch_tr)
                 loss = (cfg.lmbda * loss_kg + loss_tr) / (cfg.lmbda + 1)
@@ -460,6 +462,18 @@ if __name__ == '__main__':
                     tolerance -= 1
                 if tolerance == 0:
                     break
+        # === visualize and save embedding of triples (positive and negative 1:1) ===
+        # for k, b_kg in enumerate(train_dataloader_kg):
+        #     pred = model.aux_1(b_kg.to(device))
+        #     pred_pos_neg = pred[:, 0:2, :]
+        #     df_triple = pd.DataFrame()
+        #     for i, triple in enumerate(pred_pos_neg):
+        #         px = pd.DataFrame(triple.cpu().detach().numpy())
+        #         px['class'] = ['pos', 'neg']
+        #         px['triple'] = str(i)
+        #         df_triple = pd.concat([df_triple, px])
+        #     df_triple.to_csv('../data_plot/embedding_triple_' + cfg.loss_type + '_' + str(k) + '.csv', index=None)
+        #     vis.plot_treatment('../data_plot/', df_triple, cfg.loss_type, str(k))
         max_index = aucs.index(max(aucs))
         aucss.append(aucs[max_index])
         auprss.append(auprs[max_index])
@@ -469,16 +483,18 @@ if __name__ == '__main__':
         model_log = model_log + f'AUC:{aucs[max_index]}\tAUPR:{auprs[max_index]}\tFmax:{fmaxs[max_index]}\tEpoch:{max_index * cfg.valid_interval}' + '\n'
 
         dict_emb_e = dict(zip(e_dict.keys(), model.e_embedding.weight.data.cpu().detach().numpy()))
-        # print(dict_emb_e)
+        # dict_emb_r = dict(zip(r_dict.keys(), model.r_embedding.weight.data.cpu().detach().numpy()))
+        # print(dict_emb_r)
         list_dict_emb.append(dict_emb_e)
-        # save_embedding(dict_emb_e)
-        # break
+
 
     print(
         f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}')
     model_log = model_log + f'AVG# AUC:{round(sum(aucss) / len(aucss), 4)}\tAUPR:{round(sum(auprss) / len(auprss), 4)}\tFmax:{round(sum(fmaxss) / len(fmaxss), 4)}' + '\n'
     save_model_log(model_log, cfg.base_model + '_' + cfg.loss_type + '.log')
     if cfg.base_model == 'DistMult' and cfg.loss_type == 'pu':
+        best_avg_auc = load_best_auc('best_avg_auc.txt')
+        print('best_avg_auc: ', best_avg_auc)
         if round(sum(aucss) / len(aucss), 4) > best_avg_auc:
             save_embedding(list_dict_emb, cfg.loss_type)
             save_best_auc(str(round(sum(aucss) / len(aucss), 4)), 'best_avg_auc.txt')
